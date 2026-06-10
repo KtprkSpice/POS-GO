@@ -11,16 +11,19 @@ import (
 func GetSupplier(db *sql.DB) ([]model.Supplier, error) {
 	q, err := db.Query(`
 	SELECT 
-		id,
-		name,
-		email,
-		phone,
-		wallet_address,
-		farm_name,
-		farm_address,
-		user_id
-	FROM suppliers
-	WHERE deleted_at IS NULL
+		s.id,
+		s.phone,
+		s.wallet_address,
+		s.farm_name,
+		s.farm_address,
+		s.user_id,
+		u.name,
+		u.email
+	FROM suppliers s
+	JOIN users u
+		ON s.user_id = u.id
+	WHERE s.deleted_at IS NULL
+	AND u.deleted_at IS NULL
 	`)
 
 	if err != nil {
@@ -36,13 +39,13 @@ func GetSupplier(db *sql.DB) ([]model.Supplier, error) {
 
 		q.Scan(
 			&spl.ID,
-			&spl.Name,
-			&spl.Email,
 			&spl.Phone,
 			&spl.WalletAddress,
 			&spl.FarmName,
 			&spl.FarmAddress,
 			&spl.UserId,
+			&spl.Name,
+			&spl.Email,
 		)
 
 		Supplier = append(Supplier, spl)
@@ -90,8 +93,6 @@ func CreateSupplier (db *sql.DB, spl model.Supplier, password string) error {
 
 	SupplierQuerry := `
 	INSERT INTO suppliers(
-		name,
-		email,
 		phone,
 		wallet_address,
 		farm_name,
@@ -100,15 +101,13 @@ func CreateSupplier (db *sql.DB, spl model.Supplier, password string) error {
 		created_at,
 		updated_at
 	) VALUES (
-	?,?,?,?,?,?,?,now(),now() 
+	?,?,?,?,?,now(),now() 
 	)
 	` 
 
 	_,err = tx.ExecContext(
 		ctx,
 		SupplierQuerry,
-		spl.Name,
-		spl.Email,
 		spl.Phone,
 		spl.WalletAddress,
 		spl.FarmName,
@@ -121,5 +120,98 @@ func CreateSupplier (db *sql.DB, spl model.Supplier, password string) error {
 	}
 
 	return  tx.Commit()
+
+}
+
+func GetSupplierById (db *sql.DB, id int) (model.Supplier, error) {
+	var spl model.Supplier
+
+	err := db.QueryRow(`
+	SELECT 
+		s.id,
+		u.name,
+		u.email,
+		s.phone,
+		s.wallet_address,
+		s.farm_name,
+		s.farm_address,
+		s.user_id
+	FROM suppliers s
+	JOIN users u
+		ON s.user_id = u.id
+	WHERE s.id = ?
+	AND s.deleted_at IS NULL
+	AND u.deleted_at IS NULL
+	`, 
+	id).Scan(
+		&spl.ID,
+		&spl.Name,
+		&spl.Email,
+		&spl.Phone,
+		&spl.WalletAddress,
+		&spl.FarmName,
+		&spl.FarmAddress,
+		&spl.UserId,
+	)
+
+	return spl, err
+}
+
+func UpdateSupplier (db *sql.DB, id int, spl model.Supplier) error {
+	ctx := context.Background()
+	tx, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+
+	defer tx.Rollback()
+
+	UserQuery := `
+	UPDATE users SET
+		name = ?,
+		updated_at = now()
+	WHERE id = (
+		SELECT user_id FROM suppliers WHERE id = ?
+	)
+	AND deleted_at IS NULL
+	`
+
+	_,err = tx.ExecContext(
+		ctx,
+		UserQuery,
+		spl.Name,
+		id,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	SupplierQuerry := `
+	UPDATE suppliers SET
+		phone = ?,
+		wallet_address = ?,
+		farm_name = ?,
+		farm_address = ?,
+		updated_at = now()
+	WHERE id = ?
+	AND deleted_at IS NULL
+	`
+
+	_,err = tx.ExecContext(
+		ctx,
+		SupplierQuerry,
+		spl.Phone,
+		spl.WalletAddress,
+		spl.FarmName,
+		spl.FarmAddress,
+		id,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return tx.Commit()
 
 }

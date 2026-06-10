@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"pos-app/model"
 	"pos-app/repository"
+	"strconv"
 )
 
 func GetSupplier(db *sql.DB) http.HandlerFunc {
@@ -51,5 +52,74 @@ func CreateSupplierHandler(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(map[string]string {
 			"message" : "Supplier Created",
 		})
+	}
+}
+
+func GetSupplierByIdHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		idStr := r.URL.Query().Get("id")
+
+		id,err := strconv.Atoi(idStr)
+		if err != nil {
+			http.Error(w,"Invalid Id"+err.Error(), http.StatusBadRequest)
+			return 
+		}
+
+		spl, err := repository.GetSupplierById(db,id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return 
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(spl)
+	}
+}
+
+func UpdateSupplierHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPut {
+			http.Error(w, "Invalid Method", http.StatusMethodNotAllowed)
+			return 
+		}
+
+		idStr := r.URL.Query().Get("id")
+		if idStr == "" {
+			http.Error(w, "ID is required", http.StatusBadRequest)
+			return 
+		}
+
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			http.Error(w, "Invalid id"+err.Error(), http.StatusBadRequest)
+			return 
+		}
+
+		var spl model.Supplier
+		err = json.NewDecoder(r.Body).Decode(&spl)
+		if err != nil {
+			http.Error(w, "Invalid request Body"+err.Error(), http.StatusBadRequest)
+			return 
+		}
+
+		if spl.Name == "" {
+			http.Error(w, "Invalid Name", http.StatusBadRequest)
+			return 	
+		}
+
+		if spl.Email == "" {
+			http.Error(w, "invalid Email", http.StatusBadRequest)
+			return 
+		}
+
+		err = repository.UpdateSupplier(db,id,spl)
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]string {
+			"message" :"Updated successfully",
+		})
+
 	}
 }

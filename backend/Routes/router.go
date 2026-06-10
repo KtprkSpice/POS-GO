@@ -15,9 +15,20 @@ func SetupRoutes(db *sql.DB) *http.ServeMux {
 		handlers.GetSupplier(db),
 	)
 
+	// Create Supplier
 	mux.Handle(
 		"/supplier/create",
 		handlers.CreateSupplierHandler(db),
+	)
+
+	mux.Handle(
+		"/supplier",
+		handlers.GetSupplierByIdHandler(db),
+	)
+
+	mux.Handle(
+		"/supplier/update",
+		handlers.UpdateSupplierHandler(db),
 	)
 
 	return  mux

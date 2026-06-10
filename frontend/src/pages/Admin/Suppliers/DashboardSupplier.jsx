@@ -67,7 +67,7 @@ function DashboardSupplier() {
         cell: ({ row }) => (
           <div className="flex gap-2 *:cursor-pointer">
             <button
-              // onClick={() => navigate(`/admin/employee/edit/${row.original.id}`)}
+              onClick={() => navigate(`/admin/supplier/edit/${row.original.id}`)}
               className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
               Edit
