@@ -21,14 +21,37 @@ func SetupRoutes(db *sql.DB) *http.ServeMux {
 		handlers.CreateSupplierHandler(db),
 	)
 
+	// Get Supplier By id
 	mux.Handle(
 		"/supplier",
 		handlers.GetSupplierByIdHandler(db),
 	)
 
+	// Update Supplier
 	mux.Handle(
 		"/supplier/update",
 		handlers.UpdateSupplierHandler(db),
+	)
+
+	// GetAll Cashiers
+	mux.Handle(
+		"/cashiers",
+		handlers.GetCashiersHandler(db),
+	)
+	// Create Cashier
+	mux.Handle(
+		"/cashier/create",
+		handlers.CreateCashierHandler(db),
+	)
+	// Get Cashier By Id
+	mux.Handle(
+		"/cashier",
+		handlers.GetCashierByIdHandler(db),
+	)
+	// Update Cashier
+	mux.Handle(
+		"/cashier/update",
+		handlers.UpdateCashierHandler(db),
 	)
 
 	return  mux

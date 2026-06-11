@@ -35,11 +35,11 @@ function AdminLayout() {
             </li>
             <li>
               <Link
-                to={"/admin/employees"}
+                to={"/admin/suppliers"}
                 className="p-5 border-b border-black  text-white flex gap-2 items-center"
               >
                 <Community />
-                <span>Data Karyawan</span>
+                <span>Data Supplier</span>
               </Link>
             </li>
             <li>
@@ -54,11 +54,11 @@ function AdminLayout() {
             </li>
             <li>
               <Link
-                to={"/admin/positions"}
+                to={"/admin/cashiers"}
                 className="p-5 border-b border-black  text-white flex gap-2 items-center"
               >
                 <UserIdCard />
-                <span>Positions</span>
+                <span>Data Cashier</span>
               </Link>
             </li>
           </ul>

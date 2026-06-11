@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AlertError, AlertSuccess } from "../../../components/Alert";
 import { useNavigate, useParams } from "react-router";
 
-const EditSupplier = () => {
+function EditSupplier() {
     const { id } = useParams(); // Ambil ID dari URL
     const [formData, setFormData] = useState({
         name: "",

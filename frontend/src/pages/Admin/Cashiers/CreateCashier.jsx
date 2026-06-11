@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { AlertError, AlertSuccess } from "../../../components/Alert";
 import { useNavigate } from "react-router";
 
-function CreateSupplier() {
+function CreateCashier() {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         phone: "",
         wallet_address: "",
-        farm_name: "",
-        farm_address: "",
+        home_address: "",
     });
 
     const [loading, setLoading] = useState(false);
@@ -30,7 +29,7 @@ function CreateSupplier() {
 
         try {
             // Sesuaikan URL endpoint ini dengan router Go backend-mu
-            const response = await fetch("http://localhost:8080/supplier/create", {
+            const response = await fetch("http://localhost:8080/cashier/create", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -48,10 +47,9 @@ function CreateSupplier() {
                     email: "",
                     phone: "",
                     wallet_address: "",
-                    farm_name: "",
-                    farm_address: "",
+                    home_address: "",
                 });
-                navigate("/admin/suppliers", {
+                navigate("/admin/cashiers", {
                     state: {
                         successMessage: data.message
                     }
@@ -90,7 +88,7 @@ function CreateSupplier() {
             <div className="p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-md mb-6 text-xs flex items-start space-x-2">
                 <i className="bx bx-info-circle text-sm mt-0.5"></i>
                 <p>
-                    <strong>Catatan Sistem:</strong> Membuat supplier baru akan otomatis men-generate akun login di tabel <code>users</code> menggunakan <strong>Email</strong> sebagai username dan <strong>password</strong> sebagai password bawaan.
+                    <strong>Catatan Sistem:</strong> Membuat kasir baru akan otomatis men-generate akun login di tabel <code>users</code> menggunakan <strong>Email</strong> sebagai username dan <strong>password</strong> sebagai password bawaan.
                 </p>
             </div>
 
@@ -98,7 +96,7 @@ function CreateSupplier() {
                 {/* Grid untuk Data Personal */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Nama Supplier / PT</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Nama Kasir</label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                                 <i className="bx bx-user"></i>
@@ -109,7 +107,7 @@ function CreateSupplier() {
                                 required
                                 value={formData.name}
                                 onChange={handleChange}
-                                placeholder="cth: Gayo Coffee Group"
+                                placeholder="cth: Fira Agustine"
                                 className="pl-10 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-gray-50 focus:bg-white transition-all"
                             />
                         </div>
@@ -127,7 +125,7 @@ function CreateSupplier() {
                                 required
                                 value={formData.email}
                                 onChange={handleChange}
-                                placeholder="supplier@email.com"
+                                placeholder="firagusrtin@email.com"
                                 className="pl-10 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-gray-50 focus:bg-white transition-all"
                             />
                         </div>
@@ -179,31 +177,17 @@ function CreateSupplier() {
                 <div className="bg-gray-50 p-4 rounded-lg space-y-4 border border-gray-100">
                     <h3 className="text-sm font-semibold text-gray-700 flex items-center space-x-1">
                         <i className="bx bx-store-alt text-amber-600"></i>
-                        <span>Informasi Kebun / Farm</span>
+                        <span>Informasi Rumah</span>
                     </h3>
-
                     <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">Nama Kebun</label>
-                        <input
-                            type="text"
-                            name="farm_name"
-                            required
-                            value={formData.farm_name}
-                            onChange={handleChange}
-                            placeholder="cth: Perkebunan Kopi Mandiri"
-                            className="w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-white transition-all"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">Alamat Kebun</label>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Alamat Rumah</label>
                         <textarea
-                            name="farm_address"
+                            name="home_address"
                             required
                             rows="3"
-                            value={formData.farm_address}
+                            value={formData.home_address}
                             onChange={handleChange}
-                            placeholder="Tulis alamat kebun lengkap..."
+                            placeholder="Tulis alamat rumah lengkap..."
                             className="w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-white transition-all"
                         ></textarea>
                     </div>
@@ -230,7 +214,7 @@ function CreateSupplier() {
                         ) : (
                             <>
                                 <i className="bx bx-save"></i>
-                                <span>Simpan Supplier</span>
+                                <span>Simpan Cashier</span>
                             </>
                         )}
                     </button>
@@ -240,4 +224,4 @@ function CreateSupplier() {
     );
 };
 
-export default CreateSupplier;
+export default CreateCashier;

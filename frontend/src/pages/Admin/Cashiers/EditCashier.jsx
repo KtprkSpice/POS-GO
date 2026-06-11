@@ -1,20 +1,55 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AlertError, AlertSuccess } from "../../../components/Alert";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
-function CreateSupplier() {
+function EditCashier() {
+    const { id } = useParams();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         phone: "",
         wallet_address: "",
-        farm_name: "",
-        farm_address: "",
+        home_address: "",
     });
 
     const [loading, setLoading] = useState(false);
+    const [fetchingData, setFetchingData] = useState(true);
     const [message, setMessage] = useState({ type: "", text: "" });
     const navigate = useNavigate();
+
+    // Fetch data Cashier saat komponen mount
+    useEffect(() => {
+        const fetchCashier = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/cashier?id=${id}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    setFormData({
+                        name: data.name || "",
+                        email: data.email || "",
+                        phone: data.phone || "",
+                        wallet_address: data.wallet_address || "",
+                        home_address: data.home_address || "",
+                    });
+                } else {
+                    setMessage({ type: "error", text: data.error || "Gagal mengambil data Cashier." });
+                    setTimeout(() => {
+                        navigate("/admin/cashiers");
+                    }, 2000);
+                }
+            } catch (error) {
+                setMessage({ type: "error", text: "Terjadi kesalahan koneksi ke server." });
+                setTimeout(() => {
+                    navigate("/admin/cashiers");
+                }, 2000);
+            } finally {
+                setFetchingData(false);
+            }
+        };
+
+        fetchCashier();
+    }, [id, navigate]);
 
     const handleChange = (e) => {
         setFormData({
@@ -29,9 +64,8 @@ function CreateSupplier() {
         setMessage({ type: "", text: "" });
 
         try {
-            // Sesuaikan URL endpoint ini dengan router Go backend-mu
-            const response = await fetch("http://localhost:8080/supplier/create", {
-                method: "POST",
+            const response = await fetch(`http://localhost:8080/cashier/update?id=${id}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -41,23 +75,14 @@ function CreateSupplier() {
             const data = await response.json();
 
             if (response.ok) {
-                AlertSuccess("Berhasil Input Data");
-                // Reset form setelah sukses
-                setFormData({
-                    name: "",
-                    email: "",
-                    phone: "",
-                    wallet_address: "",
-                    farm_name: "",
-                    farm_address: "",
-                });
-                navigate("/admin/suppliers", {
+                AlertSuccess("Berhasil Update Data");
+                navigate("/admin/cashiers", {
                     state: {
-                        successMessage: data.message
+                        successMessage: data.message || "Cashier berhasil diupdate."
                     }
-                })
+                });
             } else {
-                setMessage({ type: "error", text: data.error || "Gagal menambahkan supplier." });
+                setMessage({ type: "error", text: data.error || "Gagal mengupdate Cashier." });
             }
         } catch (error) {
             setMessage({ type: "error", text: "Terjadi kesalahan koneksi ke server." });
@@ -66,11 +91,24 @@ function CreateSupplier() {
         }
     };
 
+    // Tampilkan loading saat mengambil data
+    if (fetchingData) {
+        return (
+            <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md my-8">
+                <div className="flex justify-center items-center py-12">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+                    <span className="ml-3 text-gray-600">Memuat data cashier...</span>
+                </div>
+            </div>
+        );
+    }
+
+
     return (
         <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md my-8">
             <div className="flex items-center space-x-2 border-b pb-4 mb-6">
                 <i className="bx bx-user-plus text-2xl text-amber-600"></i>
-                <h2 className="text-xl font-bold text-gray-800">Tambah Supplier Baru</h2>
+                <h2 className="text-xl font-bold text-gray-800">Edit Data Cashier</h2>
             </div>
 
             {/* Alert Message */}
@@ -90,7 +128,7 @@ function CreateSupplier() {
             <div className="p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-md mb-6 text-xs flex items-start space-x-2">
                 <i className="bx bx-info-circle text-sm mt-0.5"></i>
                 <p>
-                    <strong>Catatan Sistem:</strong> Membuat supplier baru akan otomatis men-generate akun login di tabel <code>users</code> menggunakan <strong>Email</strong> sebagai username dan <strong>password</strong> sebagai password bawaan.
+                    <strong>Catatan Sistem:</strong> Membuat kasir baru akan otomatis men-generate akun login di tabel <code>users</code> menggunakan <strong>Email</strong> sebagai username dan <strong>password</strong> sebagai password bawaan.
                 </p>
             </div>
 
@@ -98,7 +136,7 @@ function CreateSupplier() {
                 {/* Grid untuk Data Personal */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Nama Supplier / PT</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Nama Kasir</label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                                 <i className="bx bx-user"></i>
@@ -109,7 +147,7 @@ function CreateSupplier() {
                                 required
                                 value={formData.name}
                                 onChange={handleChange}
-                                placeholder="cth: Gayo Coffee Group"
+                                placeholder="cth: Fira Agustine"
                                 className="pl-10 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-gray-50 focus:bg-white transition-all"
                             />
                         </div>
@@ -127,10 +165,12 @@ function CreateSupplier() {
                                 required
                                 value={formData.email}
                                 onChange={handleChange}
-                                placeholder="supplier@email.com"
-                                className="pl-10 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-gray-50 focus:bg-white transition-all"
+                                disabled
+                                placeholder="firagusrtin@email.com"
+                                className="cursor-not-allowed pl-10 w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-gray-50 focus:bg-white transition-all"
                             />
                         </div>
+                        <p className="text-xs text-gray-500 mt-1">Email tidak dapat diubah</p>
                     </div>
                 </div>
 
@@ -179,31 +219,17 @@ function CreateSupplier() {
                 <div className="bg-gray-50 p-4 rounded-lg space-y-4 border border-gray-100">
                     <h3 className="text-sm font-semibold text-gray-700 flex items-center space-x-1">
                         <i className="bx bx-store-alt text-amber-600"></i>
-                        <span>Informasi Kebun / Farm</span>
+                        <span>Informasi Rumah</span>
                     </h3>
-
                     <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">Nama Kebun</label>
-                        <input
-                            type="text"
-                            name="farm_name"
-                            required
-                            value={formData.farm_name}
-                            onChange={handleChange}
-                            placeholder="cth: Perkebunan Kopi Mandiri"
-                            className="w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-white transition-all"
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">Alamat Kebun</label>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Alamat Rumah</label>
                         <textarea
-                            name="farm_address"
+                            name="home_address"
                             required
                             rows="3"
-                            value={formData.farm_address}
+                            value={formData.home_address}
                             onChange={handleChange}
-                            placeholder="Tulis alamat kebun lengkap..."
+                            placeholder="Tulis alamat rumah lengkap..."
                             className="w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-white transition-all"
                         ></textarea>
                     </div>
@@ -212,6 +238,7 @@ function CreateSupplier() {
                 {/* Tombol Aksi */}
                 <div className="flex justify-end space-x-3 pt-2">
                     <button
+                        onClick={() => navigate("/admin/cashiers")}
                         type="button"
                         className="px-5 py-2.5 border rounded-md text-sm text-gray-600 hover:bg-gray-100 transition-all flex items-center space-x-1"
                     >
@@ -230,7 +257,7 @@ function CreateSupplier() {
                         ) : (
                             <>
                                 <i className="bx bx-save"></i>
-                                <span>Simpan Supplier</span>
+                                <span>Simpan Cashier</span>
                             </>
                         )}
                     </button>
@@ -240,4 +267,4 @@ function CreateSupplier() {
     );
 };
 
-export default CreateSupplier;
+export default EditCashier;
