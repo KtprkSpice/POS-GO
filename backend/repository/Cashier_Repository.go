@@ -11,7 +11,6 @@ import (
 func GetCashiers(db *sql.DB) ([]model.Cashier, error) {
 	q, err := db.Query(`
 		SELECT
-			c.id,
 			u.name,
 			u.email,
 			c.phone,	
@@ -35,7 +34,6 @@ func GetCashiers(db *sql.DB) ([]model.Cashier, error) {
 		var csr model.Cashier
 
 		q.Scan(
-			&csr.ID,
 			&csr.Name,
 			&csr.Email,
 			&csr.Phone,
@@ -118,7 +116,7 @@ func CreateCashier(Db *sql.DB, csr model.Cashier, password string) error {
 	return tx.Commit()
 }
 
-func GetCashierById (db *sql.DB, id int) (model.Cashier, error) {
+func GetCashierById(db *sql.DB, id int) (model.Cashier, error) {
 	var csr model.Cashier
 
 	err := db.QueryRow(`
@@ -149,7 +147,7 @@ func GetCashierById (db *sql.DB, id int) (model.Cashier, error) {
 	return csr,err
 }
 
-func UpdateCashier (db *sql.DB, id int, csr model.Cashier) error {
+func UpdateCashier(db *sql.DB, id int, csr model.Cashier) error {
 		
 	ctx := context.Background()
 	tx,err := db.BeginTx(ctx, nil)

@@ -10,11 +10,20 @@ import EditSupplier from "./pages/Admin/Suppliers/EditSupplier.jsx";
 import DashboardCashier from "./pages/Admin/Cashiers/DashboardCashier.jsx";
 import CreateCashier from "./pages/Admin/Cashiers/CreateCashier.jsx";
 import EditCashier from "./pages/Admin/Cashiers/EditCashier.jsx";
+import Login from "./pages/auth/Login.jsx";
+import Register from "./pages/auth/Register.jsx";
+import ForgotPassword from "./pages/auth/ForgotPassword.jsx";
+import SupplierLayout from "./pages/Layouts/Supplier.jsx";
+import DashboardProductSupplier from "./pages/Supplier/Supply/DashboardProductSupplier.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
+        {/* Auth */}
+        <Route element={<Login />} path="/login" />
+        <Route element={<Register />} path="/register" />
+        <Route element={<ForgotPassword />} path="/forgot-password" />
         <Route element={<AdminLayout />} path="/admin">
           {/* Suppliers */}
           <Route element={<DashboardSupplier />} path="/admin/suppliers" />
@@ -24,6 +33,11 @@ createRoot(document.getElementById("root")).render(
           <Route element={<DashboardCashier />} path="/admin/cashiers" />
           <Route element={<CreateCashier />} path="/admin/cashier/create" />
           <Route element={<EditCashier />} path="/admin/cashier/edit/:id" />
+        </Route>
+
+        {/* Supplier Layout */}
+        <Route element={<SupplierLayout />}>
+          <Route element={<DashboardProductSupplier />} path="/supplier/dashboard" />
         </Route>
       </Routes>
     </BrowserRouter>

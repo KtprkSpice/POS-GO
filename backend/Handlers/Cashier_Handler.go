@@ -96,17 +96,17 @@ func UpdateCashierHandler(db *sql.DB) http.HandlerFunc {
 		}
 
 		if csr.Name == "" {
-			http.Error(w, "Invalid Name"+err.Error(), http.StatusBadRequest)
+			http.Error(w, "Invalid Name", http.StatusBadRequest)
 			return 
 		}
 
 		if csr.Email == "" {
-			http.Error(w, "Invalid Email"+err.Error(), http.StatusBadRequest)
+			http.Error(w, "Invalid Email", http.StatusBadRequest)
 			return 
 		}
 
 		if csr.Phone == "" {
-			http.Error(w, "Invalid phone number"+err.Error(), http.StatusBadRequest)
+			http.Error(w, "Invalid phone number", http.StatusBadRequest)
 			return 
 		}
 

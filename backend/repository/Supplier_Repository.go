@@ -54,7 +54,7 @@ func GetSupplier(db *sql.DB) ([]model.Supplier, error) {
 	return  Supplier, nil
 }
 
-func CreateSupplier (db *sql.DB, spl model.Supplier, password string) error {
+func CreateSupplier(db *sql.DB, spl model.Supplier, password string) error {
 	ctx := context.Background()
 	tx,err := db.BeginTx(ctx, nil)
 	
@@ -123,7 +123,7 @@ func CreateSupplier (db *sql.DB, spl model.Supplier, password string) error {
 
 }
 
-func GetSupplierById (db *sql.DB, id int) (model.Supplier, error) {
+func GetSupplierById(db *sql.DB, id int) (model.Supplier, error) {
 	var spl model.Supplier
 
 	err := db.QueryRow(`
@@ -214,4 +214,4 @@ func UpdateSupplier (db *sql.DB, id int, spl model.Supplier) error {
 
 	return tx.Commit()
 
-}
+}	

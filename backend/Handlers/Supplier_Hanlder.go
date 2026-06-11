@@ -114,6 +114,10 @@ func UpdateSupplierHandler(db *sql.DB) http.HandlerFunc {
 		}
 
 		err = repository.UpdateSupplier(db,id,spl)
+		if err != nil {
+			http.Error(w, "Failed to update data: "+err.Error(), http.StatusInternalServerError)
+			return 
+		}
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
