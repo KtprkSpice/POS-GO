@@ -1,17 +1,16 @@
-package handlers
+package ownercashier
 
 import (
 	"database/sql"
 	"encoding/json"
 	"net/http"
-	"pos-app/model"
-	"pos-app/repository"
+	cashier "pos-app/Cashier"
 	"strconv"
 )
 
 func GetCashiersHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		Cashier, err := repository.GetCashiers(db)
+		Cashier, err := GetCashiers(db)
 		if err != nil {
 			http.Error(w, "Invalid Request"+err.Error(), http.StatusBadRequest)
 			return 
@@ -29,7 +28,7 @@ func CreateCashierHandler(db *sql.DB) http.HandlerFunc {
 			return 
 		}
 
-		var csr model.Cashier
+		var csr cashier.Cashier
 
 		err := json.NewDecoder(r.Body).Decode(&csr)
 		if err != nil {
@@ -39,7 +38,7 @@ func CreateCashierHandler(db *sql.DB) http.HandlerFunc {
 
 		password := "password"
 
-		err =  repository.CreateCashier(db, csr, password)
+		err =  CreateCashier(db, csr, password)
 		if err != nil {
 			http.Error(w, "Create Cashier Failed"+err.Error(), http.StatusBadRequest)
 			return 
@@ -63,7 +62,7 @@ func GetCashierByIdHandler(db *sql.DB) http.HandlerFunc {
 			return 
 		}
 
-		csr, err := repository.GetCashierById(db, id)
+		csr, err := GetCashierById(db, id)
 		if err != nil {
 			http.Error(w, "Failed To Fetch Cashier By Id"+err.Error(), http.StatusBadRequest)
 			return 
@@ -88,7 +87,7 @@ func UpdateCashierHandler(db *sql.DB) http.HandlerFunc {
 			return 
 		}
 
-		var csr model.Cashier
+		var csr cashier.Cashier
 		err = json.NewDecoder(r.Body).Decode(&csr)
 		if err != nil {
 			http.Error(w, "Failed to fetch data"+err.Error(), http.StatusBadRequest)
@@ -110,7 +109,7 @@ func UpdateCashierHandler(db *sql.DB) http.HandlerFunc {
 			return 
 		}
 
-		err = repository.UpdateCashier(db, id, csr)
+		err = UpdateCashier(db, id, csr)
 		if err != nil {
 			http.Error(w, "Failed to Update Data"+err.Error(), http.StatusInternalServerError)
 			return 

@@ -1,17 +1,16 @@
-package handlers
+package ownersupplier
 
 import (
 	"database/sql"
 	"encoding/json"
 	"net/http"
-	"pos-app/model"
-	"pos-app/repository"
+	suppliers "pos-app/Suppliers"
 	"strconv"
 )
 
-func GetSupplier(db *sql.DB) http.HandlerFunc {
+func GetSupplierHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		Supplier, err := repository.GetSupplier(db)
+		Supplier, err := GetSupplier(db)
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -31,7 +30,7 @@ func CreateSupplierHandler(db *sql.DB) http.HandlerFunc {
 			return 
 		}
 
-		var spl model.Supplier
+		var spl suppliers.Supplier
 
 		err := json.NewDecoder(r.Body).Decode(&spl)
 		if err != nil {
@@ -41,7 +40,7 @@ func CreateSupplierHandler(db *sql.DB) http.HandlerFunc {
 
 		password := "password"
 
-		err = repository.CreateSupplier(db, spl, password)
+		err = CreateSupplier(db, spl, password)
 		if err != nil {
 			http.Error(w, "Failed to create Supplier: "+err.Error(), http.StatusInternalServerError)
 			return 
@@ -66,7 +65,7 @@ func GetSupplierByIdHandler(db *sql.DB) http.HandlerFunc {
 			return 
 		}
 
-		spl, err := repository.GetSupplierById(db,id)
+		spl, err := GetSupplierById(db,id)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return 
@@ -96,7 +95,7 @@ func UpdateSupplierHandler(db *sql.DB) http.HandlerFunc {
 			return 
 		}
 
-		var spl model.Supplier
+		var spl suppliers.Supplier
 		err = json.NewDecoder(r.Body).Decode(&spl)
 		if err != nil {
 			http.Error(w, "Invalid request Body"+err.Error(), http.StatusBadRequest)
@@ -113,7 +112,7 @@ func UpdateSupplierHandler(db *sql.DB) http.HandlerFunc {
 			return 
 		}
 
-		err = repository.UpdateSupplier(db,id,spl)
+		err = UpdateSupplier(db,id,spl)
 		if err != nil {
 			http.Error(w, "Failed to update data: "+err.Error(), http.StatusInternalServerError)
 			return 

@@ -1,14 +1,14 @@
-package repository
+package ownersupplier
 
 import (
 	"context"
 	"database/sql"
-	"pos-app/model"
+	suppliers "pos-app/Suppliers"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-func GetSupplier(db *sql.DB) ([]model.Supplier, error) {
+func GetSupplier(db *sql.DB) ([]suppliers.Supplier, error) {
 	q, err := db.Query(`
 	SELECT 
 		s.id,
@@ -32,10 +32,10 @@ func GetSupplier(db *sql.DB) ([]model.Supplier, error) {
 
 	defer q.Close()
 
-	var Supplier []model.Supplier
+	var supplier []suppliers.Supplier
 
 	for q.Next() {
-		var spl model.Supplier
+		var spl suppliers.Supplier
 
 		q.Scan(
 			&spl.ID,
@@ -48,13 +48,13 @@ func GetSupplier(db *sql.DB) ([]model.Supplier, error) {
 			&spl.Email,
 		)
 
-		Supplier = append(Supplier, spl)
+		supplier = append(supplier, spl)
 	}
 
-	return  Supplier, nil
+	return  supplier, nil
 }
 
-func CreateSupplier(db *sql.DB, spl model.Supplier, password string) error {
+func CreateSupplier(db *sql.DB, spl suppliers.Supplier, password string) error {
 	ctx := context.Background()
 	tx,err := db.BeginTx(ctx, nil)
 	
@@ -123,8 +123,8 @@ func CreateSupplier(db *sql.DB, spl model.Supplier, password string) error {
 
 }
 
-func GetSupplierById(db *sql.DB, id int) (model.Supplier, error) {
-	var spl model.Supplier
+func GetSupplierById(db *sql.DB, id int) (suppliers.Supplier, error) {
+	var spl suppliers.Supplier
 
 	err := db.QueryRow(`
 	SELECT 
@@ -157,7 +157,7 @@ func GetSupplierById(db *sql.DB, id int) (model.Supplier, error) {
 	return spl, err
 }
 
-func UpdateSupplier (db *sql.DB, id int, spl model.Supplier) error {
+func UpdateSupplier (db *sql.DB, id int, spl suppliers.Supplier) error {
 	ctx := context.Background()
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {

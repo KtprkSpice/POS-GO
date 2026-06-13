@@ -66,9 +66,9 @@ func AuthMiddleware(db *sql.DB) func(http.Handler) http.Handler {
 	}
 }
 
-func RoleMiddleware(allowedRoles ...string) func(http.HandlerFunc) http.HandlerFunc {
-	return func(next http.HandlerFunc) http.HandlerFunc {
-		return func(w http.ResponseWriter, r *http.Request) {
+func RoleMiddleware(allowedRoles ...string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			userRole, ok := r.Context().Value(UserRoleKey).(string)
 			if !ok {
 				http.Error(w, "Forbidden - No Role Found", http.StatusForbidden)
@@ -77,12 +77,12 @@ func RoleMiddleware(allowedRoles ...string) func(http.HandlerFunc) http.HandlerF
 
 			for _,role := range allowedRoles{
 				if userRole == role {
-					next (w,r)
+					next.ServeHTTP (w,r)
 					return 
 				}
 			}
 
 			http.Error(w, "Forbidden - Access Denied", http.StatusForbidden)
-		}
+		})
 	}
 }

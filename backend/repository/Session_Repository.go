@@ -80,10 +80,10 @@ func GetSessionByToken(ctx context.Context, db *sql.DB, token string) (model.Ses
 	return Session, err
 }
 
-func CreateLoginActivity(db *sql.DB, userID int64, sessionID *int64, action, ipAddress, userAgent string) error {
+func CreateLoginActivity(db *sql.DB, userID *int64, sessionID *int64, action, ipAddress, userAgent string) error {
     query := `
-        INSERT INTO login_activities (user_id, session_id, action, ip_address, user_agent)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO login_activities (user_id, session_id, action, ip_address, user_agent, created_at)
+        VALUES (?, ?, ?, ?, ?,NOW())
     `
     _, err := db.Exec(query, userID, sessionID, action, ipAddress, userAgent)
     return err

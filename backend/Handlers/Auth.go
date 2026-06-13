@@ -75,7 +75,7 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 		if err != nil {
 			_= repository.CreateLoginActivity(
 				db,
-				0,
+				nil,
 				nil,
 				"failed",
 				ipAddress,
@@ -96,7 +96,7 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 		if err != nil {
 			_= repository.CreateLoginActivity(
 				db,
-				user.ID,
+				&user.ID,
 				nil,
 				"failed",
 				ipAddress,
@@ -127,7 +127,7 @@ func LoginHandler(db *sql.DB) http.HandlerFunc {
 
 		_ = repository.CreateLoginActivity(
 			db,
-			user.ID,
+			&user.ID,
 			&session.ID,
 			"login",
 			ipAddress,

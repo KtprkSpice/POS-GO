@@ -1,14 +1,14 @@
-package repository
+package ownercashier
 
 import (
 	"context"
 	"database/sql"
-	"pos-app/model"
+	cashier "pos-app/Cashier"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-func GetCashiers(db *sql.DB) ([]model.Cashier, error) {
+func GetCashiers(db *sql.DB) ([]cashier.Cashier, error) {
 	q, err := db.Query(`
 		SELECT
 			u.name,
@@ -29,9 +29,9 @@ func GetCashiers(db *sql.DB) ([]model.Cashier, error) {
 
 	defer q.Close()
 
-	var Cashiers []model.Cashier
+	var Cashiers []cashier.Cashier
 	for q.Next() {
-		var csr model.Cashier
+		var csr cashier.Cashier
 
 		q.Scan(
 			&csr.Name,
@@ -48,7 +48,7 @@ func GetCashiers(db *sql.DB) ([]model.Cashier, error) {
 	return Cashiers, nil
 }
 
-func CreateCashier(Db *sql.DB, csr model.Cashier, password string) error {
+func CreateCashier(Db *sql.DB, csr cashier.Cashier, password string) error {
 	
 	ctx := context.Background()
 	tx,err := Db.BeginTx(ctx, nil)
@@ -116,8 +116,8 @@ func CreateCashier(Db *sql.DB, csr model.Cashier, password string) error {
 	return tx.Commit()
 }
 
-func GetCashierById(db *sql.DB, id int) (model.Cashier, error) {
-	var csr model.Cashier
+func GetCashierById(db *sql.DB, id int) (cashier.Cashier, error) {
+	var csr cashier.Cashier
 
 	err := db.QueryRow(`
 	SELECT
@@ -147,7 +147,7 @@ func GetCashierById(db *sql.DB, id int) (model.Cashier, error) {
 	return csr,err
 }
 
-func UpdateCashier(db *sql.DB, id int, csr model.Cashier) error {
+func UpdateCashier(db *sql.DB, id int, csr cashier.Cashier) error {
 		
 	ctx := context.Background()
 	tx,err := db.BeginTx(ctx, nil)

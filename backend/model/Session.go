@@ -17,7 +17,7 @@ type Session struct {
 
 type LoginActivity struct {
     ID        int64      `json:"id"`
-    UserID    int64      `json:"user_id"`
+    UserID    *int64      `json:"user_id"`
     SessionID *int64     `json:"session_id"`
     Action    string     `json:"action"` // login, logout, expired, failed
     IPAddress string     `json:"ip_address"`
