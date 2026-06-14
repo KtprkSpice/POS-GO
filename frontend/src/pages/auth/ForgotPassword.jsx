@@ -20,7 +20,6 @@ const ForgotPassword = () => {
         setMessage({ type: "", text: "" });
 
         try {
-            // Sesuaikan dengan endpoint backend Anda
             const response = await fetch("http://localhost:8080/forgot-password", {
                 method: "POST",
                 headers: {
@@ -61,7 +60,6 @@ const ForgotPassword = () => {
         setMessage({ type: "", text: "" });
 
         try {
-            // Sesuaikan dengan endpoint backend Anda
             const response = await fetch("http://localhost:8080/reset-password", {
                 method: "POST",
                 headers: {
@@ -94,7 +92,6 @@ const ForgotPassword = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8 bg-white rounded-2xl shadow-xl p-8 md:p-10">
-                {/* Header */}
                 <div className="text-center">
                     <div className="flex justify-center">
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full mb-4 overflow-hidden">
@@ -115,13 +112,11 @@ const ForgotPassword = () => {
                     </p>
                 </div>
 
-                {/* Alert Message */}
                 {message.text && (
                     <div className={`p-4 rounded-lg text-sm flex items-center space-x-2 ${message.type === "success"
                         ? "bg-green-50 text-green-700 border border-green-200"
                         : "bg-red-50 text-red-700 border border-red-200"
                         }`}>
-                        {/* Menggunakan kondisi komponen untuk CheckCircle / ErrorCircle */}
                         {message.type === "success" ? (
                             <CheckCircle className="w-5 h-5" />
                         ) : (
@@ -131,7 +126,6 @@ const ForgotPassword = () => {
                     </div>
                 )}
 
-                {/* Form Send OTP */}
                 {!otpSent ? (
                     <form className="mt-8 space-y-6" onSubmit={handleSendOTP}>
                         <div>
@@ -178,10 +172,8 @@ const ForgotPassword = () => {
                         </p>
                     </form>
                 ) : (
-                    /* Form Reset Password */
                     <form className="mt-8 space-y-6" onSubmit={handleResetPassword}>
                         <div className="space-y-4">
-                            {/* OTP Input */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Kode OTP
@@ -201,7 +193,6 @@ const ForgotPassword = () => {
                                 </div>
                             </div>
 
-                            {/* New Password */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Password Baru
@@ -228,7 +219,6 @@ const ForgotPassword = () => {
                                 </div>
                             </div>
 
-                            {/* Confirm New Password */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Konfirmasi Password Baru

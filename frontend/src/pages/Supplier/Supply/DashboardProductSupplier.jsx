@@ -57,7 +57,6 @@ function DashboardProductSupplier() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 p-6">
 
-            {/* Header */}
             <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
                 <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
                     <div>
@@ -77,7 +76,6 @@ function DashboardProductSupplier() {
                 </div>
             </div>
 
-            {/* Statistik */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 
                 <div className="bg-white rounded-xl p-5 shadow">
@@ -124,7 +122,6 @@ function DashboardProductSupplier() {
 
             </div>
 
-            {/* Search */}
             <div className="bg-white rounded-xl shadow p-4 mb-6">
                 <div className="relative">
                     <Search className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
@@ -138,7 +135,6 @@ function DashboardProductSupplier() {
                 </div>
             </div>
 
-            {/* Produk */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                 {filteredProducts.map((product) => (

@@ -27,7 +27,6 @@ function DashboardCashier() {
         }
     }, [location, navigate])
 
-    // Get Cashier
     useEffect(() => {
         fetch('http://localhost:8080/cashiers')
             .then(res => res.json())
@@ -151,7 +150,6 @@ function DashboardCashier() {
                     </table>
                 </div>
 
-                {/* Pagination */}
                 <div className="flex gap-2 mt-4 justify-center">
                     <button
                         onClick={() => table.previousPage()}

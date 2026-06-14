@@ -53,7 +53,7 @@ const Login = () => {
 
                 setTimeout(() => {
                     if (data.user?.role === "owner") {
-                        navigate("/admin/dashboard");
+                        navigate("/admin/suppliers");
                     } else if (data.user?.role === "supplier") {
                         navigate("/supplier/dashboard");
                     } else {
@@ -73,7 +73,6 @@ const Login = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 flex items-center justify-center p-4">
             <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
-                {/* Header */}
                 <div className="bg-amber-600 px-6 py-8 text-center">
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full mb-4 overflow-hidden">
                         <img
@@ -86,7 +85,6 @@ const Login = () => {
                     <p className="text-amber-100 mt-1">Silakan login ke akun Anda</p>
                 </div>
 
-                {/* Form */}
                 <div className="p-6">
                     {message.text && (
                         <div className={`p-3 rounded-lg mb-4 text-sm flex items-center gap-2 ${message.type === "success"

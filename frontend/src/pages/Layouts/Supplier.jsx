@@ -5,15 +5,14 @@ import {
     Package,
     User,
     ArrowOutRightCircleHalf,
-    Menu, // Import icon menu untuk hamburger button
-    X    // Import icon X untuk close button
+    Menu,
+    X
 } from "@boxicons/react";
 import LogoPos from "../../assets/logo.jpg";
 
 function SupplierLayout() {
     const navigate = useNavigate();
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State untuk mengontrol sidebar
-
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"));
 
     const handleLogout = () => {
@@ -22,7 +21,6 @@ function SupplierLayout() {
         navigate("/login");
     };
 
-    // Fungsi pembantu untuk menutup sidebar otomatis saat link menu diklik di mobile
     const closeSidebar = () => {
         setIsSidebarOpen(false);
     };
@@ -30,7 +28,6 @@ function SupplierLayout() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 flex relative">
 
-            {/* Overlay Lapisan Hitam Transparan (Hanya muncul di mobile/tablet saat sidebar kebuka) */}
             {isSidebarOpen && (
                 <div
                     className="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
@@ -38,14 +35,10 @@ function SupplierLayout() {
                 />
             )}
 
-            {/* Sidebar */}
-            {/* Menggunakan kombinasi kelas dinamis: default tersembunyi di luar layar (translate-x-full), di desktop (lg) otomatis menetap */}
             <aside className={`w-64 min-h-screen fixed bg-gradient-to-b from-amber-600 to-orange-600 shadow-xl flex flex-col z-50 transition-transform duration-300 ease-in-out
                 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
             >
-                {/* Profile */}
                 <div className="p-8 border-b border-amber-500 relative">
-                    {/* Tombol Close (X) - Hanya muncul di layar mobile/tablet */}
                     <button
                         onClick={closeSidebar}
                         className="absolute top-4 right-4 text-white hover:text-amber-200 lg:hidden"
@@ -68,7 +61,6 @@ function SupplierLayout() {
                     </div>
                 </div>
 
-                {/* Menu */}
                 <nav className="flex-1 mt-4">
                     <ul className="space-y-2 px-3">
                         <li>
@@ -104,7 +96,6 @@ function SupplierLayout() {
                     </ul>
                 </nav>
 
-                {/* Logout */}
                 <div className="p-4 border-t border-amber-500">
                     <button
                         onClick={handleLogout}
@@ -116,14 +107,10 @@ function SupplierLayout() {
                 </div>
             </aside>
 
-            {/* Content Area */}
-            {/* Menggunakan `w-full` agar memenuhi layar di mobile, dan bergeser `lg:ml-64` di desktop */}
             <div className="flex-1 flex flex-col min-h-screen w-full lg:ml-64 transition-all">
 
-                {/* Top Header */}
                 <div className="bg-white shadow-sm px-6 py-5 sticky top-0 z-30 flex items-center justify-between lg:justify-start">
 
-                    {/* Hamburger Button (Hanya tampil di bawah ukuran desktop/lg) */}
                     <button
                         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                         className="text-amber-700 p-1 rounded-lg hover:bg-amber-50 lg:hidden focus:outline-none"
@@ -135,11 +122,9 @@ function SupplierLayout() {
                         Supplier Panel
                     </h1>
 
-                    {/* Spacing penyeimbang di mobile view */}
                     <div className="w-7 lg:hidden" />
                 </div>
 
-                {/* Main Content */}
                 <main className="p-4 sm:p-6 lg:p-8 flex-1">
                     <Outlet />
                 </main>

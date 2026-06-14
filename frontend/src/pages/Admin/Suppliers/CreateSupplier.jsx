@@ -29,7 +29,6 @@ function CreateSupplier() {
         setMessage({ type: "", text: "" });
 
         try {
-            // Sesuaikan URL endpoint ini dengan router Go backend-mu
             const response = await fetch("http://localhost:8080/supplier/create", {
                 method: "POST",
                 headers: {
@@ -42,7 +41,6 @@ function CreateSupplier() {
 
             if (response.ok) {
                 AlertSuccess("Berhasil Input Data");
-                // Reset form setelah sukses
                 setFormData({
                     name: "",
                     email: "",
@@ -73,7 +71,6 @@ function CreateSupplier() {
                 <h2 className="text-xl font-bold text-gray-800">Tambah Supplier Baru</h2>
             </div>
 
-            {/* Alert Message */}
             {message.text && (
                 <div
                     className={`p-4 mb-6 rounded-md text-sm flex items-center space-x-2 ${message.type === "success"
@@ -86,7 +83,6 @@ function CreateSupplier() {
                 </div>
             )}
 
-            {/* Info Tambahan untuk User */}
             <div className="p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-md mb-6 text-xs flex items-start space-x-2">
                 <i className="bx bx-info-circle text-sm mt-0.5"></i>
                 <p>
@@ -95,7 +91,6 @@ function CreateSupplier() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Grid untuk Data Personal */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Nama Supplier / PT</label>
@@ -134,7 +129,6 @@ function CreateSupplier() {
                     </div>
                 </div>
 
-                {/* Grid untuk Kontak & Crypto Wallet */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">No. Telepon / WhatsApp</label>
@@ -175,7 +169,6 @@ function CreateSupplier() {
 
                 <hr className="my-2 border-gray-100" />
 
-                {/* Bagian Informasi Kebun */}
                 <div className="bg-gray-50 p-4 rounded-lg space-y-4 border border-gray-100">
                     <h3 className="text-sm font-semibold text-gray-700 flex items-center space-x-1">
                         <i className="bx bx-store-alt text-amber-600"></i>
@@ -209,7 +202,6 @@ function CreateSupplier() {
                     </div>
                 </div>
 
-                {/* Tombol Aksi */}
                 <div className="flex justify-end space-x-3 pt-2">
                     <button
                         type="button"

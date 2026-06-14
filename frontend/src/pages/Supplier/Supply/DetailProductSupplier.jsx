@@ -65,7 +65,6 @@ function DetailProductSupplier() {
 
             <div className="max-w-4xl mx-auto">
 
-                {/* Header */}
                 <div className="bg-white rounded-2xl shadow p-6 mb-6">
                     <button
                         onClick={() => navigate(-1)}
@@ -99,7 +98,6 @@ function DetailProductSupplier() {
                     </div>
                 </div>
 
-                {/* Informasi Kerja Sama */}
                 <div className="bg-white rounded-2xl shadow p-6 mb-6">
                     <h2 className="text-xl font-semibold mb-4">
                         Informasi Kerja Sama
@@ -155,7 +153,6 @@ function DetailProductSupplier() {
                     </div>
                 </div>
 
-                {/* Deskripsi */}
                 <div className="bg-white rounded-2xl shadow p-6 mb-6">
                     <h2 className="text-xl font-semibold mb-4">
                         Deskripsi Produk
@@ -166,7 +163,6 @@ function DetailProductSupplier() {
                     </p>
                 </div>
 
-                {/* Catatan Review */}
                 <div className="bg-white rounded-2xl shadow p-6">
                     <h2 className="text-xl font-semibold mb-4">
                         Catatan Review

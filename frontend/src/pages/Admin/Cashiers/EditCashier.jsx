@@ -17,7 +17,6 @@ function EditCashier() {
     const [message, setMessage] = useState({ type: "", text: "" });
     const navigate = useNavigate();
 
-    // Fetch data Cashier saat komponen mount
     useEffect(() => {
         const fetchCashier = async () => {
             try {
@@ -91,7 +90,6 @@ function EditCashier() {
         }
     };
 
-    // Tampilkan loading saat mengambil data
     if (fetchingData) {
         return (
             <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md my-8">
@@ -124,7 +122,6 @@ function EditCashier() {
                 </div>
             )}
 
-            {/* Info Tambahan untuk User */}
             <div className="p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-md mb-6 text-xs flex items-start space-x-2">
                 <i className="bx bx-info-circle text-sm mt-0.5"></i>
                 <p>
@@ -133,7 +130,6 @@ function EditCashier() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Grid untuk Data Personal */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Nama Kasir</label>
@@ -174,7 +170,6 @@ function EditCashier() {
                     </div>
                 </div>
 
-                {/* Grid untuk Kontak & Crypto Wallet */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">No. Telepon / WhatsApp</label>
@@ -215,7 +210,6 @@ function EditCashier() {
 
                 <hr className="my-2 border-gray-100" />
 
-                {/* Bagian Informasi Kebun */}
                 <div className="bg-gray-50 p-4 rounded-lg space-y-4 border border-gray-100">
                     <h3 className="text-sm font-semibold text-gray-700 flex items-center space-x-1">
                         <i className="bx bx-store-alt text-amber-600"></i>
@@ -235,7 +229,6 @@ function EditCashier() {
                     </div>
                 </div>
 
-                {/* Tombol Aksi */}
                 <div className="flex justify-end space-x-3 pt-2">
                     <button
                         onClick={() => navigate("/admin/cashiers")}

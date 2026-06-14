@@ -27,31 +27,27 @@ function DashboardSupplier() {
     }
   }, [location, navigate])
 
-  // Get Supplier
-  // Ambil Data Supplier / Product
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    // PERHATIKAN: URL di bawah ini menggunakan '/product' BUKAN '/products'
     fetch('http://localhost:8080/supplier/product', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     })
       .then(res => {
-        // Jika server mengembalikan 404 atau 401, handle di sini agar tidak crash ke .json()
         if (!res.ok) {
           throw new Error(`Server bermasalah! Status: ${res.status}`);
         }
         return res.json();
       })
       .then(data => {
-        // Pastikan jika backend mengembalikan null, state diisi array kosong []
+
         setSuppliers(data || []);
       })
       .catch((err) => {
         console.error("Gagal memuat data supplier:", err);
-        setSuppliers([]); // Amankan table agar tidak blank/crash
+        setSuppliers([]);
       });
   }, []);
 
@@ -63,23 +59,23 @@ function DashboardSupplier() {
         cell: ({ row }) => row.index + 1,
       },
       {
-        accessorKey: 'product_name', // Matches Go json:"product_name"
+        accessorKey: 'product_name',
         header: 'Product Name',
       },
       {
-        accessorKey: 'supplier_name', // Matches Go json:"supplier_name"
+        accessorKey: 'supplier_name',
         header: 'Supplier Name',
       },
       {
-        accessorKey: 'reciver_name', // Matches Go json:"reciver_name"
+        accessorKey: 'reciver_name',
         header: 'Receiver Name',
       },
       {
-        accessorKey: 'status', // Matches Go json:"status"
+        accessorKey: 'status',
         header: 'Status',
       },
       {
-        accessorKey: 'recived_at', // Matches Go json:"recived_at"
+        accessorKey: 'recived_at',
         header: 'Received At',
         cell: ({ getValue }) => {
           const val = getValue();
@@ -179,7 +175,6 @@ function DashboardSupplier() {
           </table>
         </div>
 
-        {/* Pagination */}
         <div className="flex gap-2 mt-4 justify-center">
           <button
             onClick={() => table.previousPage()}

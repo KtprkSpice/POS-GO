@@ -54,7 +54,6 @@ const CreateProduct = () => {
 
             if (response.ok) {
                 AlertSuccess("Berhasil Menambah Produk");
-                // Reset form
                 setFormData({
                     product_name: "",
                     description: "",
@@ -87,7 +86,6 @@ const CreateProduct = () => {
                 <h2 className="text-xl font-bold text-gray-800">Tambah Produk Baru</h2>
             </div>
 
-            {/* Alert Message */}
             {message.text && (
                 <div
                     className={`p-4 mb-6 rounded-md text-sm flex items-center space-x-2 ${message.type === "success"
@@ -100,7 +98,6 @@ const CreateProduct = () => {
                 </div>
             )}
 
-            {/* Info Tambahan */}
             <div className="p-3 bg-blue-50 border border-blue-200 text-blue-800 rounded-md mb-6 text-xs flex items-start space-x-2">
                 <i className="bx bx-info-circle text-sm mt-0.5"></i>
                 <p>
@@ -110,7 +107,6 @@ const CreateProduct = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Nama Produk */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Nama Produk <span className="text-red-500">*</span>
@@ -134,7 +130,6 @@ const CreateProduct = () => {
                     </p>
                 </div>
 
-                {/* Deskripsi */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Deskripsi Produk
@@ -159,7 +154,6 @@ const CreateProduct = () => {
 
                 <hr className="my-2 border-gray-100" />
 
-                {/* Tombol Aksi */}
                 <div className="flex justify-end space-x-3 pt-2">
                     <button
                         type="button"
