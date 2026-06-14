@@ -28,11 +28,32 @@ function DashboardSupplier() {
   }, [location, navigate])
 
   // Get Supplier
+  // Ambil Data Supplier / Product
   useEffect(() => {
-    fetch('http://localhost:8080/suppliers')
-      .then(res => res.json())
-      .then(data => setSuppliers(data))
-  }, [])
+    const token = localStorage.getItem("token");
+
+    // PERHATIKAN: URL di bawah ini menggunakan '/product' BUKAN '/products'
+    fetch('http://localhost:8080/supplier/product', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        // Jika server mengembalikan 404 atau 401, handle di sini agar tidak crash ke .json()
+        if (!res.ok) {
+          throw new Error(`Server bermasalah! Status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then(data => {
+        // Pastikan jika backend mengembalikan null, state diisi array kosong []
+        setSuppliers(data || []);
+      })
+      .catch((err) => {
+        console.error("Gagal memuat data supplier:", err);
+        setSuppliers([]); // Amankan table agar tidak blank/crash
+      });
+  }, []);
 
   const columns = useMemo(
     () => [
@@ -42,24 +63,28 @@ function DashboardSupplier() {
         cell: ({ row }) => row.index + 1,
       },
       {
-        accessorKey: 'name',
+        accessorKey: 'product_name', // Matches Go json:"product_name"
+        header: 'Product Name',
+      },
+      {
+        accessorKey: 'supplier_name', // Matches Go json:"supplier_name"
         header: 'Supplier Name',
       },
       {
-        accessorKey: 'email',
-        header: 'Supplier Email',
+        accessorKey: 'reciver_name', // Matches Go json:"reciver_name"
+        header: 'Receiver Name',
       },
       {
-        accessorKey: 'phone',
-        header: 'Phone',
+        accessorKey: 'status', // Matches Go json:"status"
+        header: 'Status',
       },
       {
-        accessorKey: 'farm_name',
-        header: 'Farm Name',
-      },
-      {
-        accessorKey: 'farm_address',
-        header: 'Farm Address',
+        accessorKey: 'recived_at', // Matches Go json:"recived_at"
+        header: 'Received At',
+        cell: ({ getValue }) => {
+          const val = getValue();
+          return val ? new Date(val).toLocaleDateString() : '-';
+        },
       },
       {
         id: 'actions',
@@ -73,7 +98,6 @@ function DashboardSupplier() {
               Edit
             </button>
             <button
-              // onClick={() => deleteEmployee(row.original.id)}
               className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
             >
               Delete

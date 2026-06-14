@@ -16,9 +16,13 @@ func SetupRoutes(db *sql.DB) *http.ServeMux {
 	)
 
 
-	// Supplier Route
+	// Owner Route
 	SupplierRouter(mux,db)
 	CashierRouter(mux,db)
-
+	// End Owner Route
+	
+	//Supplier Route
+	ProductRouter(mux,db)
+	// End Supplier Route 
 	return  mux
 }
