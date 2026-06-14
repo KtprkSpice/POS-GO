@@ -47,6 +47,13 @@ function DashboardProductSupplier() {
         (item) => item.status === "pending"
     ).length;
 
+    const statusStyle = {
+        approved: "bg-green-100 text-green-700",
+        rejected: "bg-red-100 text-red-700",
+        pending: "bg-orange-100 text-orange-700",
+        shipped: "bg-blue-100 text-blue-700",
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 p-6">
 
@@ -147,14 +154,16 @@ function DashboardProductSupplier() {
                                 </h3>
 
                                 <span
-                                    className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${product.status === "approved"
-                                        ? "bg-green-100 text-green-700"
-                                        : product.status === "rejected"
-                                            ? "bg-red-100 text-red-700"
-                                            : "bg-orange-100 text-orange-700"
+                                    className={`px-4 py-2 rounded-full text-sm font-semibold ${statusStyle[product.status]
                                         }`}
                                 >
-                                    {product.status || "pending"}
+                                    {product.status === "approved"
+                                        ? "Disetujui"
+                                        : product.status === "rejected"
+                                            ? "Ditolak"
+                                            : product.status === "shipped"
+                                                ? "Dikirim"
+                                                : "Menunggu Dikirim"}
                                 </span>
                             </div>
 
@@ -206,7 +215,7 @@ function DashboardProductSupplier() {
                                 </button>
 
 
-                                {product.status !== "approved" && product.status !== "active" && (
+                                {product.status == "shipped" || product.status !== "pending" || (
                                     <button
                                         className="flex-1 bg-amber-600 text-white py-2 rounded-lg hover:bg-amber-700 transition"
                                     >

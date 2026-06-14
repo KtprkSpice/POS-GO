@@ -7,7 +7,7 @@ type GetProducts struct {
 	ProductName string `json:"product_name"`
 	Status      string `json:"status"`
 	RecivedAt   *time.Time `json:"recived_at"`
-	CreatedAt *time.Time `json:"created_at"`
+	SubmissionDate *time.Time `json:"submission_date"`
 	ReviewNote *string `json:"review_note"`
 	Description *string `json:"description"`
 

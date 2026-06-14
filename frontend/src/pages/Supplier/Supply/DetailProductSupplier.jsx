@@ -48,6 +48,7 @@ function DetailProductSupplier() {
         approved: "bg-green-100 text-green-700",
         rejected: "bg-red-100 text-red-700",
         pending: "bg-orange-100 text-orange-700",
+        shipped: "bg-blue-100 text-blue-700",
     };
 
 
@@ -91,7 +92,9 @@ function DetailProductSupplier() {
                                 ? "Disetujui"
                                 : product.status === "rejected"
                                     ? "Ditolak"
-                                    : "Menunggu Review"}
+                                    : product.status === "shipped"
+                                        ? "Dikirim"
+                                        : "Menunggu Dikirim"}
                         </span>
                     </div>
                 </div>
@@ -118,7 +121,7 @@ function DetailProductSupplier() {
                                 Penerima
                             </p>
                             <p className="font-semibold capitalize">
-                                {product.reciver_name ?? "-"}
+                                {product.reciver_name || "-"}
                             </p>
                         </div>
 
@@ -127,7 +130,7 @@ function DetailProductSupplier() {
                                 Tanggal Pengajuan
                             </p>
                             <p className="font-semibold">
-                                {formatDate(product.created_at ?? "-")}
+                                {formatDate(product.submission_date) ?? "-"}
                             </p>
                         </div>
 
@@ -174,7 +177,9 @@ function DetailProductSupplier() {
                             ? "bg-green-50 border border-green-200"
                             : product.status === "rejected"
                                 ? "bg-red-50 border border-red-200"
-                                : "bg-orange-50 border border-orange-200"
+                                : product.status === "shipped"
+                                    ? "bg-blue-50 border border-blue-200"
+                                    : "bg-orange-50 border border-orange-200"
                             }`}
                     >
                         {product.review_note ?? "Belum ada catatan review"}

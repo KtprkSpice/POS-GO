@@ -70,7 +70,7 @@ func GetProductById(ctx context.Context, db *sql.DB, id int) (products.GetProduc
 		p.recived_at,
 		p.review_note,
 		p.description,
-		p.created_at
+		p.submission_date
 	FROM product_sample p
 	JOIN users supplier
 		ON p.supplier_id = supplier.id
@@ -95,7 +95,7 @@ func GetProductById(ctx context.Context, db *sql.DB, id int) (products.GetProduc
 		&product.RecivedAt,
 		&product.ReviewNote,
 		&product.Description,
-		&product.CreatedAt,
+		&product.SubmissionDate,
 	)
 
 	return product, err
