@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import {
     Search,
     Package,
-    DollarCircle,
-    Box
+    CheckCircle,
+    Timer
 } from "@boxicons/react";
+import { useNavigate } from "react-router";
 
 function DashboardProductSupplier() {
-
     const [products, setProducts] = useState([]);
     const [search, setSearch] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -19,28 +20,57 @@ function DashboardProductSupplier() {
                 Authorization: `Bearer ${token}`,
             },
         })
-            .then(res => res.json())
-            .then(data => setProducts(data));
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Gagal memuat data");
+                }
+                return res.json();
+            })
+            .then((data) => {
+                setProducts(Array.isArray(data) ? data : []);
+            })
+            .catch((err) => {
+                console.error(err);
+                setProducts([]);
+            });
     }, []);
 
     const filteredProducts = products.filter((item) =>
-        item.name?.toLowerCase().includes(search.toLowerCase())
+        item.product_name?.toLowerCase().includes(search.toLowerCase())
     );
+
+    const activeProducts = products.filter(
+        (item) => item.status === "approved"
+    ).length;
+
+    const pendingProducts = products.filter(
+        (item) => item.status === "pending"
+    ).length;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 p-6">
 
             {/* Header */}
             <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
-                <h1 className="text-3xl font-bold text-amber-700">
-                    Produk Saya
-                </h1>
-                <p className="text-gray-500 mt-1">
-                    Kelola dan pantau produk yang Anda supply
-                </p>
+                <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                    <div>
+                        <h1 className="text-3xl font-bold text-amber-700">
+                            Produk Kemitraan
+                        </h1>
+                        <p className="text-gray-500 mt-1">
+                            Pantau produk yang sedang bekerja sama dengan perusahaan
+                        </p>
+                    </div>
+
+                    <button onClick={() => navigate("/supplier/product/create")}
+                        className="bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-xl font-medium transition"
+                    >
+                        + Kirim Sample Produk
+                    </button>
+                </div>
             </div>
 
-            {/* Statistics */}
+            {/* Statistik */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 
                 <div className="bg-white rounded-xl p-5 shadow">
@@ -59,16 +89,13 @@ function DashboardProductSupplier() {
 
                 <div className="bg-white rounded-xl p-5 shadow">
                     <div className="flex items-center gap-3">
-                        <Box className="w-8 h-8 text-green-600" />
+                        <CheckCircle className="w-8 h-8 text-green-600" />
                         <div>
                             <p className="text-gray-500 text-sm">
-                                Total Stok
+                                Produk Aktif
                             </p>
                             <h3 className="text-2xl font-bold">
-                                {products.reduce(
-                                    (sum, item) => sum + item.stock,
-                                    0
-                                )}
+                                {activeProducts}
                             </h3>
                         </div>
                     </div>
@@ -76,20 +103,13 @@ function DashboardProductSupplier() {
 
                 <div className="bg-white rounded-xl p-5 shadow">
                     <div className="flex items-center gap-3">
-                        <DollarCircle className="w-8 h-8 text-blue-600" />
+                        <Timer className="w-8 h-8 text-orange-600" />
                         <div>
                             <p className="text-gray-500 text-sm">
-                                Total Nilai Produk
+                                Menunggu Review
                             </p>
-                            <h3 className="text-xl font-bold">
-                                Rp{" "}
-                                {products
-                                    .reduce(
-                                        (sum, item) =>
-                                            sum + item.price * item.stock,
-                                        0
-                                    )
-                                    .toLocaleString("id-ID")}
+                            <h3 className="text-2xl font-bold">
+                                {pendingProducts}
                             </h3>
                         </div>
                     </div>
@@ -101,7 +121,6 @@ function DashboardProductSupplier() {
             <div className="bg-white rounded-xl shadow p-4 mb-6">
                 <div className="relative">
                     <Search className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
-
                     <input
                         type="text"
                         placeholder="Cari produk..."
@@ -112,7 +131,7 @@ function DashboardProductSupplier() {
                 </div>
             </div>
 
-            {/* Product Grid */}
+            {/* Produk */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                 {filteredProducts.map((product) => (
@@ -120,54 +139,80 @@ function DashboardProductSupplier() {
                         key={product.id}
                         className="bg-white rounded-2xl shadow hover:shadow-lg transition-all overflow-hidden"
                     >
-
-                        <img
-                            src={
-                                product.image ||
-                                "https://via.placeholder.com/400x250"
-                            }
-                            alt={product.name}
-                            className="w-full h-48 object-cover"
-                        />
-
                         <div className="p-5">
 
-                            <h3 className="text-xl font-semibold mb-2">
-                                {product.name}
-                            </h3>
+                            <div className="flex justify-between items-start mb-4">
+                                <h3 className="text-xl font-semibold text-amber-900 capitalize">
+                                    {product.product_name}
+                                </h3>
 
-                            <p className="text-gray-500 text-sm mb-4">
-                                {product.description}
-                            </p>
+                                <span
+                                    className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${product.status === "approved"
+                                        ? "bg-green-100 text-green-700"
+                                        : product.status === "rejected"
+                                            ? "bg-red-100 text-red-700"
+                                            : "bg-orange-100 text-orange-700"
+                                        }`}
+                                >
+                                    {product.status || "pending"}
+                                </span>
+                            </div>
 
-                            <div className="space-y-2">
+                            <div className="space-y-3 text-sm">
 
                                 <div className="flex justify-between">
                                     <span className="text-gray-500">
-                                        Harga
+                                        Supplier
                                     </span>
-                                    <span className="font-semibold text-green-600">
-                                        Rp {product.price?.toLocaleString("id-ID")}
+                                    <span className="font-semibold capitalize">
+                                        {product.supplier_name || "-"}
                                     </span>
                                 </div>
 
                                 <div className="flex justify-between">
                                     <span className="text-gray-500">
-                                        Stok
+                                        Penerima
+                                    </span>
+                                    <span className="font-semibold capitalize">
+                                        {product.reciver_name || "-"}
+                                    </span>
+                                </div>
+
+                                <div className="flex justify-between">
+                                    <span className="text-gray-500">
+                                        Diterima Pada
                                     </span>
                                     <span className="font-semibold">
-                                        {product.stock}
+                                        {product.recived_at
+                                            ? new Date(
+                                                product.recived_at
+                                            ).toLocaleDateString("id-ID", {
+                                                day: "numeric",
+                                                month: "long",
+                                                year: "numeric",
+                                            })
+                                            : "-"}
                                     </span>
                                 </div>
 
-                                <div className="flex justify-between">
-                                    <span className="text-gray-500">
-                                        Kategori
-                                    </span>
-                                    <span className="font-semibold">
-                                        {product.category}
-                                    </span>
-                                </div>
+                            </div>
+
+                            <div className="flex gap-2 mt-6">
+
+                                <button onClick={() => navigate(`/supplier/product/${product.id}`)}
+                                    className="flex-1 border border-amber-500 text-amber-600 py-2 rounded-lg hover:bg-amber-50 transition"
+                                >
+                                    Detail
+                                </button>
+
+
+                                {product.status !== "approved" && product.status !== "active" && (
+                                    <button
+                                        className="flex-1 bg-amber-600 text-white py-2 rounded-lg hover:bg-amber-700 transition"
+                                    >
+                                        Kirim Sample
+                                    </button>
+                                )}
 
                             </div>
 
@@ -179,9 +224,15 @@ function DashboardProductSupplier() {
 
             {filteredProducts.length === 0 && (
                 <div className="bg-white rounded-xl p-10 text-center shadow">
-                    <h3 className="text-lg font-semibold text-gray-700">
-                        Produk tidak ditemukan
+                    <Package className="mx-auto mb-3 w-12 h-12 text-gray-300" />
+
+                    <h3 className="text-lg font-semibold text-gray-500">
+                        Tidak ada produk ditemukan
                     </h3>
+
+                    <p className="text-gray-400 mt-2">
+                        Produk yang Anda supply akan muncul di sini
+                    </p>
                 </div>
             )}
 

@@ -15,6 +15,8 @@ import Register from "./pages/auth/Register.jsx";
 import ForgotPassword from "./pages/auth/ForgotPassword.jsx";
 import SupplierLayout from "./pages/Layouts/Supplier.jsx";
 import DashboardProductSupplier from "./pages/Supplier/Supply/DashboardProductSupplier.jsx";
+import DetailProductSupplier from "./pages/Supplier/Supply/DetailProductSupplier.jsx";
+import CreateProduct from "./pages/Supplier/Supply/CreateProduct.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -38,6 +40,8 @@ createRoot(document.getElementById("root")).render(
         {/* Supplier Layout */}
         <Route element={<SupplierLayout />}>
           <Route element={<DashboardProductSupplier />} path="/supplier/dashboard" />
+          <Route element={<DetailProductSupplier />} path="/supplier/product/:id" />
+          <Route element={<CreateProduct />} path="/supplier/product/create" />
         </Route>
       </Routes>
     </BrowserRouter>
