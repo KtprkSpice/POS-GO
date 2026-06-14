@@ -28,7 +28,13 @@ function DashboardCashier() {
     }, [location, navigate])
 
     useEffect(() => {
-        fetch('http://localhost:8080/cashiers')
+        const token = localStorage.getItem("token");
+
+        fetch('http://localhost:8080/cashiers', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(res => res.json())
             .then(data => setCashiers(data))
     }, [])

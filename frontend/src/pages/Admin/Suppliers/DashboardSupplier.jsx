@@ -19,6 +19,7 @@ function DashboardSupplier() {
   const location = useLocation();
   const navigate = useNavigate();
 
+
   useEffect(() => {
     if (location.state?.successMessage) {
       AlertSuccess(location.state.successMessage);
@@ -30,7 +31,7 @@ function DashboardSupplier() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch('http://localhost:8080/supplier/product', {
+    fetch('http://localhost:8080/suppliers', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -59,28 +60,20 @@ function DashboardSupplier() {
         cell: ({ row }) => row.index + 1,
       },
       {
-        accessorKey: 'product_name',
-        header: 'Product Name',
-      },
-      {
-        accessorKey: 'supplier_name',
+        accessorKey: 'name',
         header: 'Supplier Name',
       },
       {
-        accessorKey: 'reciver_name',
-        header: 'Receiver Name',
+        accessorKey: 'email',
+        header: 'Supplier Email',
       },
       {
-        accessorKey: 'status',
-        header: 'Status',
+        accessorKey: 'phone',
+        header: 'Supplier Phone',
       },
       {
-        accessorKey: 'recived_at',
-        header: 'Received At',
-        cell: ({ getValue }) => {
-          const val = getValue();
-          return val ? new Date(val).toLocaleDateString() : '-';
-        },
+        accessorKey: 'farm_name',
+        header: 'Farm Name',
       },
       {
         id: 'actions',
