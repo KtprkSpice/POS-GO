@@ -23,3 +23,8 @@ type CreateProducts struct {
 	// Relasi
 	SupplierName string `json:"supplier_name"`
 }
+
+type SendSample struct {
+	Status      string `json:"status"`
+	SubmissionDate *time.Time `json:"submission_date"`
+}

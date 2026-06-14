@@ -109,3 +109,35 @@ func CreateProductHandler(db *sql.DB) http.HandlerFunc {
 
 	}
 }
+
+func SendSampleHandler(db *sql.DB,) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost && r.Method != http.MethodPut {
+			WriteJson(w, http.StatusBadRequest, map[string]string {
+				"message" : "Gagal Update Data",
+			})
+		
+			return 
+		}
+
+		idStr := r.URL.Query().Get("id")
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			WriteJson(w, http.StatusInternalServerError, map[string]string {
+				"message" : "Invalid Products",
+			})
+
+			return 
+		}
+
+		product, err := SendSample(r.Context(),db,id)
+		if err != nil {
+			WriteJson(w, http.StatusInternalServerError, map[string]string {
+				"message" : "Failed to update",
+			})
+		}
+
+		WriteJson(w, http.StatusOK, product)
+
+	}
+}

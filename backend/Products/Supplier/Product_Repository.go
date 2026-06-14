@@ -125,3 +125,23 @@ func CreateProduct(ctx context.Context, db *sql.DB, UserID int64, product produc
 
 	return product, err
 }
+
+// Send Sample
+func SendSample(ctx context.Context, db *sql.DB, id int) (products.SendSample, error) {
+	q := `
+	UPDATE product_sample
+	SET
+		status = "shipped",
+		submission_date = NOW()
+	WHERE id = ?
+	`
+	var product products.SendSample
+	_,err := db.ExecContext(
+		ctx,
+		q,
+		id,
+	)
+
+	return product, err
+
+}

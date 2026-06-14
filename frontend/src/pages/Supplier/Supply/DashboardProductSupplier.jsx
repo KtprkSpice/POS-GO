@@ -6,34 +6,64 @@ import {
     Timer
 } from "@boxicons/react";
 import { useNavigate } from "react-router";
+import { AlertError, AlertSuccess } from "../../../components/Alert";
 
 function DashboardProductSupplier() {
     const [products, setProducts] = useState([]);
     const [search, setSearch] = useState("");
     const navigate = useNavigate();
 
-    useEffect(() => {
+    const fetchProducts = async () => {
         const token = localStorage.getItem("token");
 
-        fetch("http://localhost:8080/supplier/products", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error("Gagal memuat data");
-                }
-                return res.json();
-            })
-            .then((data) => {
-                setProducts(Array.isArray(data) ? data : []);
-            })
-            .catch((err) => {
-                console.error(err);
-                setProducts([]);
+        try {
+            const res = await fetch("http://localhost:8080/supplier/products", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
+
+            if (!res.ok) {
+                throw new Error("Gagal memuat data");
+            }
+
+            const data = await res.json();
+            setProducts(Array.isArray(data) ? data : []);
+        } catch (err) {
+            console.error(err);
+            setProducts([]);
+        }
+    };
+
+    useEffect(() => {
+        fetchProducts();
     }, []);
+
+
+    // Handle Sample
+    const handleSample = async (productId) => {
+        const token = localStorage.getItem("token");
+
+        try {
+            const res = await fetch(`http://localhost:8080/supplier/send-sample?id=${productId}`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!res.ok) {
+                throw new Error(`Gagal mengirim sample. Status: ${res.status}`);
+            }
+            AlertSuccess("Sukses mengirimkan sample produk!");
+            fetchProducts();
+        } catch (error) {
+            console.error(error);
+            AlertError(error.message || "Terjadi kesalahan sistem.");
+        }
+    }
+
 
     const filteredProducts = products.filter((item) =>
         item.product_name?.toLowerCase().includes(search.toLowerCase())
@@ -53,6 +83,8 @@ function DashboardProductSupplier() {
         pending: "bg-orange-100 text-orange-700",
         shipped: "bg-blue-100 text-blue-700",
     };
+
+
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 p-6">
@@ -204,7 +236,8 @@ function DashboardProductSupplier() {
 
                             <div className="flex gap-2 mt-6">
 
-                                <button onClick={() => navigate(`/supplier/product/${product.id}`)}
+                                <button
+                                    onClick={() => navigate(`/supplier/product/${product.id}`)}
                                     className="flex-1 border border-amber-500 text-amber-600 py-2 rounded-lg hover:bg-amber-50 transition"
                                 >
                                     Detail
@@ -213,6 +246,7 @@ function DashboardProductSupplier() {
 
                                 {product.status == "shipped" || product.status !== "pending" || (
                                     <button
+                                        onClick={() => handleSample(product.id)}
                                         className="flex-1 bg-amber-600 text-white py-2 rounded-lg hover:bg-amber-700 transition"
                                     >
                                         Kirim Sample
