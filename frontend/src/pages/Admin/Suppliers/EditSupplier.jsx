@@ -9,8 +9,8 @@ function EditSupplier() {
         email: "",
         phone: "",
         wallet_address: "",
-        farm_name: "",
-        farm_address: "",
+        vendor_name: "",
+        vendor_address: "",
     });
 
     const [loading, setLoading] = useState(false);
@@ -30,8 +30,8 @@ function EditSupplier() {
                         email: data.email || "",
                         phone: data.phone || "",
                         wallet_address: data.wallet_address || "",
-                        farm_name: data.farm_name || "",
-                        farm_address: data.farm_address || "",
+                        vendor_name: data.vendor_name || "",
+                        vendor_address: data.vendor_address || "",
                     });
                 } else {
                     setMessage({ type: "error", text: data.error || "Gagal mengambil data supplier." });
@@ -220,9 +220,9 @@ function EditSupplier() {
                         <label className="block text-xs font-medium text-gray-600 mb-1">Nama Kebun</label>
                         <input
                             type="text"
-                            name="farm_name"
+                            name="vendor_name"
                             required
-                            value={formData.farm_name}
+                            value={formData.vendor_name}
                             onChange={handleChange}
                             placeholder="cth: Perkebunan Kopi Mandiri"
                             className="w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-white transition-all"
@@ -232,10 +232,10 @@ function EditSupplier() {
                     <div>
                         <label className="block text-xs font-medium text-gray-600 mb-1">Alamat Kebun</label>
                         <textarea
-                            name="farm_address"
+                            name="vendor_address"
                             required
                             rows="3"
-                            value={formData.farm_address}
+                            value={formData.vendor_address}
                             onChange={handleChange}
                             placeholder="Tulis alamat kebun lengkap..."
                             className="w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-white transition-all"

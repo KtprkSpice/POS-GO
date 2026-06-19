@@ -7,7 +7,8 @@ import {
   UserIdCard,
   ArrowOutRightCircleHalf,
   Menu,
-  X
+  X,
+  Box
 } from "@boxicons/react";
 
 function AdminLayout() {
@@ -84,12 +85,12 @@ function AdminLayout() {
             </li>
             <li>
               <Link
-                to="/admin/divisions"
+                to="/admin/products/sample"
                 onClick={closeSidebar}
                 className="px-6 py-4 text-gray-300 hover:text-white hover:bg-gray-700/50 flex gap-3 items-center transition border-b border-gray-700/40"
               >
-                <Business className="w-5 h-5" />
-                <span>Divisions</span>
+                <Box className="w-5 h-5" />
+                <span>Product Submissions</span>
               </Link>
             </li>
             <li>

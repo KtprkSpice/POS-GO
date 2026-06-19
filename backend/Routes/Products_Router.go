@@ -10,7 +10,12 @@ import (
 func ProductRouter(mux *http.ServeMux, db *sql.DB) {
 	auth := middleware.AuthMiddleware(db)
 	supplierOnly := middleware.RoleMiddleware("supplier")
-
+	AllRole := middleware.RoleMiddleware("owner", "cashier", "supplier")
+	adminAndCashier := middleware.RoleMiddleware(
+	"owner",
+	"cashier",
+)
+// Start Supplier/vendor
 	// Get All Product by session
 	mux.Handle(
 		"/supplier/products",
@@ -25,7 +30,7 @@ func ProductRouter(mux *http.ServeMux, db *sql.DB) {
 	mux.Handle(
 		"/supplier/product",
 		auth(
-			supplierOnly(
+			AllRole(
 				supplier.GetProductByIdHandler(db),
 			),
 		),
@@ -50,5 +55,23 @@ func ProductRouter(mux *http.ServeMux, db *sql.DB) {
 			),
 		),
 	)
+	// End Supplier/Vendor
 
+	// Start Owner
+	// GetAllProducts
+	mux.Handle(
+		"/product-samples",
+		auth(
+			adminAndCashier(supplier.GetAllProductHandler(db)),
+		),
+	)
+
+	// Recive Products
+	mux.Handle(
+		"/product-sample/receive",
+		auth(
+			adminAndCashier(supplier.ReciveSampleHandler(db)),
+		),
+	)
+	// End Owner
 }

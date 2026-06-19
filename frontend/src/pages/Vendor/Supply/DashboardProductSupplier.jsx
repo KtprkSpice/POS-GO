@@ -100,7 +100,7 @@ function DashboardProductSupplier() {
                         </p>
                     </div>
 
-                    <button onClick={() => navigate("/supplier/product/create")}
+                    <button onClick={() => navigate("/vendor/product/create")}
                         className="bg-amber-600 hover:bg-amber-700 text-white px-5 py-3 rounded-xl font-medium transition"
                     >
                         + Kirim Sample Produk
@@ -237,7 +237,7 @@ function DashboardProductSupplier() {
                             <div className="flex gap-2 mt-6">
 
                                 <button
-                                    onClick={() => navigate(`/supplier/product/${product.id}`)}
+                                    onClick={() => navigate(`/vendor/product/${product.id}`)}
                                     className="flex-1 border border-amber-500 text-amber-600 py-2 rounded-lg hover:bg-amber-50 transition"
                                 >
                                     Detail

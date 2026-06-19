@@ -24,7 +24,8 @@ type CreateProducts struct {
 	SupplierName string `json:"supplier_name"`
 }
 
-type SendSample struct {
+type UpdateStatusSample struct {
 	Status      string `json:"status"`
 	SubmissionDate *time.Time `json:"submission_date"`
+	ReviewNote *string `json:"review_note"`
 }

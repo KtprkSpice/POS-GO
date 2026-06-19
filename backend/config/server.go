@@ -9,6 +9,6 @@ import (
 func ConnectDB() (*sql.DB, error) {
 	return sql.Open(
 		"mysql",
-		"root:@tcp(localhost:3306)/pos-app?parseTime=true",
+		"root:@tcp(localhost:3306)/pos-app?parseTime=true&loc=Asia%2FJakarta",
 	)	
 }

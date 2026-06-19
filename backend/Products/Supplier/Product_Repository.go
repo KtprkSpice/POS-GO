@@ -6,6 +6,7 @@ import (
 	products "pos-app/Products"
 )
 
+// For Supplier/Vendor
 func GetProductsBySessions( ctx context.Context ,db *sql.DB, UserId int64) ([]products.GetProducts, error) {
 	q := `
 	SELECT 
@@ -127,7 +128,7 @@ func CreateProduct(ctx context.Context, db *sql.DB, UserID int64, product produc
 }
 
 // Send Sample
-func SendSample(ctx context.Context, db *sql.DB, id int) (products.SendSample, error) {
+func SendSample(ctx context.Context, db *sql.DB, id int) (products.UpdateStatusSample, error) {
 	q := `
 	UPDATE product_sample
 	SET
@@ -135,7 +136,7 @@ func SendSample(ctx context.Context, db *sql.DB, id int) (products.SendSample, e
 		submission_date = NOW()
 	WHERE id = ?
 	`
-	var product products.SendSample
+	var product products.UpdateStatusSample
 	_,err := db.ExecContext(
 		ctx,
 		q,
@@ -144,4 +145,83 @@ func SendSample(ctx context.Context, db *sql.DB, id int) (products.SendSample, e
 
 	return product, err
 
+}
+
+
+// For Owner
+// Get All Products
+func GetAllProduct(ctx context.Context, db *sql.DB) ([]products.GetProducts, error) {
+	q := `
+	SELECT 
+		p.id,
+		p.product_name,
+		supplier.name AS supplier_name,
+		COALESCE(reciver.name, '') AS reciver_name,
+		p.status,
+		p.recived_at,
+		p.review_note,
+		p.description,
+		p.submission_date
+	FROM product_sample p
+	JOIN users supplier
+		ON p.supplier_id = supplier.id
+	LEFT JOIN users reciver
+		ON p.reciver_id = reciver.id
+	AND p.deleted_at IS NULL
+	`
+
+	data, err := db.QueryContext(
+		ctx,
+		q,
+	)
+	if err != nil {
+		return nil,err
+	}
+
+	defer data.Close()
+
+	var res []products.GetProducts
+
+	for data.Next() {
+		var product products.GetProducts
+
+		err := data.Scan(
+			&product.ProductID,
+			&product.ProductName,
+			&product.SupplierName,
+			&product.ReciverName,
+			&product.Status,
+			&product.RecivedAt,
+			&product.ReviewNote,
+			&product.Description,
+			&product.SubmissionDate,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		res = append(res, product)
+	}
+
+	return res, nil
+}
+
+func ReciveSample(ctx context.Context, db *sql.DB, id int, userID int64) (products.UpdateStatusSample, error) {
+q := `
+	UPDATE product_sample
+	SET
+		status = "recived",
+		reciver_id = ?,
+		recived_at = NOW()
+	WHERE id = ?
+	`
+	var product products.UpdateStatusSample
+	_,err := db.ExecContext(
+		ctx,
+		q,
+		userID,
+		id,
+	)
+
+	return product, err
 }

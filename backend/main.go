@@ -3,10 +3,15 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	routes "pos-app/Routes"
 	"pos-app/config"
 	"pos-app/middleware"
 )
+
+func init() {
+	os.Setenv("TZ", "Asia/Jakarta")
+}
 
 func main() {
 	db, err := config.ConnectDB()

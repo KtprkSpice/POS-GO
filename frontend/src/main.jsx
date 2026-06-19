@@ -13,10 +13,12 @@ import EditCashier from "./pages/Admin/Cashiers/EditCashier.jsx";
 import Login from "./pages/auth/Login.jsx";
 import Register from "./pages/auth/Register.jsx";
 import ForgotPassword from "./pages/auth/ForgotPassword.jsx";
-import SupplierLayout from "./pages/Layouts/Supplier.jsx";
-import DashboardProductSupplier from "./pages/Supplier/Supply/DashboardProductSupplier.jsx";
-import DetailProductSupplier from "./pages/Supplier/Supply/DetailProductSupplier.jsx";
-import CreateProduct from "./pages/Supplier/Supply/CreateProduct.jsx";
+import SupplierLayout from "./pages/Layouts/Vendor.jsx";
+import DashboardProductSupplier from "./pages/Vendor/Supply/DashboardProductSupplier.jsx";
+import DetailProductSupplier from "./pages/Vendor/Supply/DetailProductSupplier.jsx";
+import CreateProduct from "./pages/Vendor/Supply/CreateProduct.jsx";
+import ProductSamples from "./pages/Admin/Product Submission/ProductSamples.jsx";
+import DetailProductSample from "./pages/Admin/Product Submission/DetailProductSample.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -35,13 +37,16 @@ createRoot(document.getElementById("root")).render(
           <Route element={<DashboardCashier />} path="/admin/cashiers" />
           <Route element={<CreateCashier />} path="/admin/cashier/create" />
           <Route element={<EditCashier />} path="/admin/cashier/edit/:id" />
+          {/* Product Sample */}
+          <Route element={<ProductSamples />} path="/admin/products/sample" />
+          <Route element={<DetailProductSample />} path="/admin/product/sample/:id" />
         </Route>
 
         {/* Supplier Layout */}
         <Route element={<SupplierLayout />}>
-          <Route element={<DashboardProductSupplier />} path="/supplier/dashboard" />
-          <Route element={<DetailProductSupplier />} path="/supplier/product/:id" />
-          <Route element={<CreateProduct />} path="/supplier/product/create" />
+          <Route element={<DashboardProductSupplier />} path="/vendor/dashboard" />
+          <Route element={<DetailProductSupplier />} path="/vendor/product/:id" />
+          <Route element={<CreateProduct />} path="/vendor/product/create" />
         </Route>
       </Routes>
     </BrowserRouter>

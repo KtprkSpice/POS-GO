@@ -14,8 +14,8 @@ func GetSupplier(db *sql.DB) ([]suppliers.Supplier, error) {
 		s.id,
 		s.phone,
 		s.wallet_address,
-		s.farm_name,
-		s.farm_address,
+		s.vendor_name,
+		s.vendor_address,
 		s.user_id,
 		u.name,
 		u.email
@@ -41,8 +41,8 @@ func GetSupplier(db *sql.DB) ([]suppliers.Supplier, error) {
 			&spl.ID,
 			&spl.Phone,
 			&spl.WalletAddress,
-			&spl.FarmName,
-			&spl.FarmAddress,
+			&spl.VendorName,
+			&spl.VendorAddress,
 			&spl.UserId,
 			&spl.Name,
 			&spl.Email,
@@ -95,8 +95,8 @@ func CreateSupplier(db *sql.DB, spl suppliers.Supplier, password string) error {
 	INSERT INTO suppliers(
 		phone,
 		wallet_address,
-		farm_name,
-		farm_address,
+		vendorname,
+		vendoraddress,
 		user_id,
 		created_at,
 		updated_at
@@ -110,8 +110,8 @@ func CreateSupplier(db *sql.DB, spl suppliers.Supplier, password string) error {
 		SupplierQuerry,
 		spl.Phone,
 		spl.WalletAddress,
-		spl.FarmName,
-		spl.FarmAddress,
+		spl.VendorName,
+		spl.VendorAddress,
 		UserID,
 	)
 
@@ -133,8 +133,8 @@ func GetSupplierById(db *sql.DB, id int) (suppliers.Supplier, error) {
 		u.email,
 		s.phone,
 		s.wallet_address,
-		s.farm_name,
-		s.farm_address,
+		s.vendor_name,
+		s.vendor_address,
 		s.user_id
 	FROM suppliers s
 	JOIN users u
@@ -149,8 +149,8 @@ func GetSupplierById(db *sql.DB, id int) (suppliers.Supplier, error) {
 		&spl.Email,
 		&spl.Phone,
 		&spl.WalletAddress,
-		&spl.FarmName,
-		&spl.FarmAddress,
+		&spl.VendorName,
+		&spl.VendorAddress,
 		&spl.UserId,
 	)
 
@@ -191,8 +191,8 @@ func UpdateSupplier (db *sql.DB, id int, spl suppliers.Supplier) error {
 	UPDATE suppliers SET
 		phone = ?,
 		wallet_address = ?,
-		farm_name = ?,
-		farm_address = ?,
+		vendor_name = ?,
+		vendor_address = ?,
 		updated_at = now()
 	WHERE id = ?
 	AND deleted_at IS NULL
@@ -203,8 +203,8 @@ func UpdateSupplier (db *sql.DB, id int, spl suppliers.Supplier) error {
 		SupplierQuerry,
 		spl.Phone,
 		spl.WalletAddress,
-		spl.FarmName,
-		spl.FarmAddress,
+		spl.VendorName,
+		spl.VendorAddress,
 		id,
 	)
 

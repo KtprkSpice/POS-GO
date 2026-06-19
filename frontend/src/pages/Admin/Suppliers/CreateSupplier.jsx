@@ -8,8 +8,8 @@ function CreateSupplier() {
         email: "",
         phone: "",
         wallet_address: "",
-        farm_name: "",
-        farm_address: "",
+        vendor_name: "",
+        vendor_address: "",
     });
 
     const [loading, setLoading] = useState(false);
@@ -46,8 +46,8 @@ function CreateSupplier() {
                     email: "",
                     phone: "",
                     wallet_address: "",
-                    farm_name: "",
-                    farm_address: "",
+                    vendor_name: "",
+                    vendor_address: "",
                 });
                 navigate("/admin/suppliers", {
                     state: {
@@ -172,16 +172,16 @@ function CreateSupplier() {
                 <div className="bg-gray-50 p-4 rounded-lg space-y-4 border border-gray-100">
                     <h3 className="text-sm font-semibold text-gray-700 flex items-center space-x-1">
                         <i className="bx bx-store-alt text-amber-600"></i>
-                        <span>Informasi Kebun / Farm</span>
+                        <span>Informasi Vendor</span>
                     </h3>
 
                     <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">Nama Kebun</label>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Nama Vendor</label>
                         <input
                             type="text"
-                            name="farm_name"
+                            name="vendor_namename"
                             required
-                            value={formData.farm_name}
+                            value={formData.vendor_name}
                             onChange={handleChange}
                             placeholder="cth: Perkebunan Kopi Mandiri"
                             className="w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-white transition-all"
@@ -189,14 +189,14 @@ function CreateSupplier() {
                     </div>
 
                     <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">Alamat Kebun</label>
+                        <label className="block text-xs font-medium text-gray-600 mb-1">Alamat Vendor</label>
                         <textarea
-                            name="farm_address"
+                            name="vendor_address"
                             required
                             rows="3"
-                            value={formData.farm_address}
+                            value={formData.vendor_address}
                             onChange={handleChange}
-                            placeholder="Tulis alamat kebun lengkap..."
+                            placeholder="Tulis alamat Vendor lengkap..."
                             className="w-full p-2.5 border rounded-md focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm bg-white transition-all"
                         ></textarea>
                     </div>

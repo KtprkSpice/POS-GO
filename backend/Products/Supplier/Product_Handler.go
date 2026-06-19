@@ -141,3 +141,50 @@ func SendSampleHandler(db *sql.DB,) http.HandlerFunc {
 
 	}
 }
+
+func GetAllProductHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ProductSample, err := GetAllProduct(r.Context(), db)
+		if err != nil {
+			WriteJson(w, http.StatusInternalServerError, map[string]string {
+				"message" : "Failed to fetch data",
+			})
+			return 
+		}
+
+		WriteJson(w, http.StatusOK, ProductSample)
+
+	}
+}
+
+func ReciveSampleHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPut {
+			WriteJson(w, http.StatusMethodNotAllowed, map[string]string{
+				"message" : "Invalid method",
+			})
+
+			return 
+		}
+
+		UserID, ok := r.Context().Value(middleware.UserIDKey).(int64)
+		if !ok {
+			WriteJson(w, http.StatusBadRequest, map[string]string {
+				"message" : "Invalid User ID",
+			})
+		}
+
+		idStr:= r.URL.Query().Get("id")
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			WriteJson(w, http.StatusBadRequest, map[string]string {
+				"message" : "Invalid id",
+			})
+			return 
+		}
+
+		product, err := ReciveSample(r.Context(),db,id, UserID)
+
+		WriteJson(w, http.StatusOK, product)
+	}
+}

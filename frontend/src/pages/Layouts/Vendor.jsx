@@ -65,7 +65,7 @@ function SupplierLayout() {
                     <ul className="space-y-2 px-3">
                         <li>
                             <Link
-                                to="/supplier/dashboard"
+                                to="/vendor/dashboard"
                                 onClick={closeSidebar}
                                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-white hover:bg-white/20 transition"
                             >
@@ -75,7 +75,7 @@ function SupplierLayout() {
                         </li>
                         <li>
                             <Link
-                                to="/supplier/products"
+                                to="/vendor/products"
                                 onClick={closeSidebar}
                                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-white hover:bg-white/20 transition"
                             >
@@ -85,7 +85,7 @@ function SupplierLayout() {
                         </li>
                         <li>
                             <Link
-                                to="/supplier/profile"
+                                to="/vendor/profile"
                                 onClick={closeSidebar}
                                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-white hover:bg-white/20 transition"
                             >

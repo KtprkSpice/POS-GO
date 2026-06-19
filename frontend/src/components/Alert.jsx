@@ -49,3 +49,19 @@ export const AlertLoading = (message) => {
         },
     });
 };
+
+export const ReviewSwal = async () => {
+    const { value: review } = await Swal.fire({
+        title: "Review Produk",
+        input: "textarea",
+        inputPlaceholder: "Tulis review produk di sini...",
+        showCancelButton: true,
+        confirmButtonText: "Kirim",
+        cancelButtonText: "Batal",
+        inputAttributes: {
+            "aria-label": "Review Produk"
+        }
+    });
+
+    return review || null;
+};

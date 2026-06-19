@@ -72,8 +72,8 @@ function DashboardSupplier() {
         header: 'Supplier Phone',
       },
       {
-        accessorKey: 'farm_name',
-        header: 'Farm Name',
+        accessorKey: 'vendor_name',
+        header: 'Vendor Name',
       },
       {
         id: 'actions',
