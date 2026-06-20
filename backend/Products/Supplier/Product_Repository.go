@@ -68,8 +68,10 @@ func GetProductById(ctx context.Context, db *sql.DB, id int) (products.GetProduc
 		supplier.name AS supplier_name,
 		COALESCE(reciver.name, '') AS reciver_name,
 		p.status,
+		COALESCE(reviewer.name, '') AS reviewer_name,
 		p.recived_at,
 		p.review_note,
+		p.review_date,
 		p.description,
 		p.submission_date
 	FROM product_sample p
@@ -77,6 +79,8 @@ func GetProductById(ctx context.Context, db *sql.DB, id int) (products.GetProduc
 		ON p.supplier_id = supplier.id
 	LEFT JOIN users reciver
 		ON p.reciver_id = reciver.id
+	LEFT JOIN users reviewer
+		ON p.reciver_id = reviewer.id
 	WHERE p.id = ?
 	AND p.deleted_at IS NULL
 	` 
@@ -93,8 +97,10 @@ func GetProductById(ctx context.Context, db *sql.DB, id int) (products.GetProduc
 		&product.SupplierName,
 		&product.ReciverName,
 		&product.Status,
+		&product.ReviewerName,
 		&product.RecivedAt,
 		&product.ReviewNote,
+		&product.ReviewDate,
 		&product.Description,
 		&product.SubmissionDate,
 	)
@@ -222,6 +228,31 @@ q := `
 		userID,
 		id,
 	)
+
+	return product, err
+}
+
+func ReviewSample(ctx context.Context, db *sql.DB, id int, userID int64, req products.ReviewSample) (products.ReviewSample, error) {
+	q := `
+	UPDATE product_sample
+	SET
+		status = ?,
+		reviewer_id = ?,
+		review_date = NOW(),
+		review_note = ?
+	WHERE id  = ?
+	`
+
+	var product products.ReviewSample
+	_,err := db.ExecContext(
+		ctx,
+		q,
+		req.Status,
+		userID,
+		req.ReviewNote,
+		id,
+	)
+	
 
 	return product, err
 }

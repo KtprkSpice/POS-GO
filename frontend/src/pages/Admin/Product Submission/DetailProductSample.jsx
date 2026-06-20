@@ -6,6 +6,8 @@ function DetailProductSample() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [product, setProduct] = useState(null)
+    const [reviewNote, setReviewNote] = useState("");
+    const [status, setStatus] = useState("");
 
     const formatDate = (date) => {
         if (!date) {
@@ -19,29 +21,75 @@ function DetailProductSample() {
         });
     }
 
-    useEffect(() => {
-        const token = localStorage.getItem("token")
-        fetch(`http://localhost:8080/supplier/product?id=${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then(async (res) => {
-                const data = await res.json();
+    const fetchProduct = async () => {
+        const token = localStorage.getItem("token");
 
-                if (!res.ok) {
-                    throw new Error(data.message ?? "Gagal mengambil data");
+        try {
+            const res = await fetch(
+                `http://localhost:8080/supplier/product?id=${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 }
+            );
 
-                return data;
-            })
-            .then((data) => {
-                setProduct(data)
-            })
-            .catch((err) => {
-                AlertError(err)
-            })
-    }, [id])
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message ?? "Gagal mengambil data");
+            }
+
+            setProduct(data);
+            setReviewNote(data.review_note || "");
+            setStatus(data.status || "");
+        } catch (err) {
+            AlertError(err.message);
+        }
+    };
+
+    useEffect(() => {
+        fetchProduct();
+    }, [id]);
+
+    const handleReview = async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const res = await fetch(
+                `http://localhost:8080/product-sample/review?id=${id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        status,
+                        review_note: reviewNote,
+                    }),
+                }
+            );
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.message || "Gagal update review");
+            }
+
+            AlertSuccess("Review berhasil diperbarui");
+
+            setProduct((prev) => ({
+                ...prev,
+                status,
+                review_note: reviewNote,
+            }));
+
+            await fetchProduct()
+        } catch (err) {
+            AlertError(err.message);
+        }
+    };
 
 
     const statusStyle = {
@@ -137,12 +185,13 @@ function DetailProductSample() {
 
                         <div>
                             <p className="text-gray-500 text-sm">
-                                Tanggal Review
+                                Nama Revierwer
                             </p>
-                            <p className="font-semibold">
-                                {formatDate(product.reviewed_at) ?? "-"}
+                            <p className="font-semibold capitalize">
+                                {(product.reviewer_name) ?? "-"}
                             </p>
                         </div>
+
 
                         <div>
                             <p className="text-gray-500 text-sm">
@@ -152,6 +201,19 @@ function DetailProductSample() {
                                 {formatDate(product.recived_at) ?? "-"}
                             </p>
                         </div>
+
+
+                        <div>
+                            <p className="text-gray-500 text-sm">
+                                Tanggal Review
+                            </p>
+                            <p className="font-semibold">
+                                {formatDate(product.review_date) ?? "-"}
+                            </p>
+                        </div>
+
+
+
 
                     </div>
                 </div>
@@ -168,20 +230,48 @@ function DetailProductSample() {
 
                 <div className="bg-white rounded-2xl shadow p-6">
                     <h2 className="text-xl font-semibold mb-4">
-                        Catatan Review
+                        Review Produk
                     </h2>
 
-                    <div
-                        className={`rounded-xl p-4 ${product.status === "approved"
-                            ? "bg-green-50 border border-green-200"
-                            : product.status === "rejected"
-                                ? "bg-red-50 border border-red-200"
-                                : product.status === "shipped"
-                                    ? "bg-blue-50 border border-blue-200"
-                                    : "bg-orange-50 border border-orange-200"
-                            }`}
-                    >
-                        {product.review_note ?? "Belum ada catatan review"}
+                    <div className="space-y-4">
+
+                        <div>
+                            <label className="block text-sm font-medium mb-2">
+                                Status
+                            </label>
+
+                            <select
+                                value={status}
+                                onChange={(e) => setStatus(e.target.value)}
+                                className="w-full border rounded-lg p-3"
+                            >
+                                <option value="">Pilih Status</option>
+                                <option value="approved">Approve</option>
+                                <option value="rejected">Reject</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium mb-2">
+                                Catatan Review (Opsional)
+                            </label>
+
+                            <textarea
+                                rows={4}
+                                value={reviewNote}
+                                onChange={(e) => setReviewNote(e.target.value)}
+                                placeholder="Masukkan catatan review..."
+                                className="w-full border rounded-lg p-3"
+                            />
+                        </div>
+
+                        <button
+                            onClick={handleReview}
+                            disabled={!status}
+                            className="bg-amber-600 text-white px-5 py-2 rounded-lg hover:bg-amber-700 disabled:bg-gray-400"
+                        >
+                            Update Review
+                        </button>
                     </div>
                 </div>
 

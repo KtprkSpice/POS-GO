@@ -188,3 +188,53 @@ func ReciveSampleHandler(db *sql.DB) http.HandlerFunc {
 		WriteJson(w, http.StatusOK, product)
 	}
 }
+
+func ReviewSampleHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPut {
+			WriteJson(w, http.StatusBadRequest, map[string]string {
+				"message" : "Gagal Update Data",
+			})
+			return 
+		}
+		
+		UserID, ok := r.Context().Value(middleware.UserIDKey).(int64)
+		if !ok {
+			WriteJson(w,http.StatusBadRequest, map[string]string {
+				"message" : "Invalid ID",
+			})
+			return 
+		} 
+
+		
+		idStr := r.URL.Query().Get("id")
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			WriteJson(w, http.StatusInternalServerError, map[string]string {
+				"message" : "Invalid Products",
+			})
+
+			return 
+		}
+
+		var req products.ReviewSample
+		err = json.NewDecoder(r.Body).Decode(&req)
+		if err != nil {
+			WriteJson(w, http.StatusBadRequest, map[string]string{
+				"message": "Invalid body",
+			})
+
+			return
+		}
+
+
+		product, err := ReviewSample(r.Context(),db,id,UserID, req)
+		if err != nil {
+			WriteJson(w, http.StatusInternalServerError, map[string]string {
+				"message" : "Failed to update",
+			})
+		}
+
+		WriteJson(w, http.StatusOK, product)
+	}
+}

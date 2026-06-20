@@ -73,5 +73,11 @@ func ProductRouter(mux *http.ServeMux, db *sql.DB) {
 			adminAndCashier(supplier.ReciveSampleHandler(db)),
 		),
 	)
+	mux.Handle(
+		"/product-sample/review",
+		auth(
+			adminAndCashier(supplier.ReviewSampleHandler(db)),
+		),
+	)
 	// End Owner
 }
