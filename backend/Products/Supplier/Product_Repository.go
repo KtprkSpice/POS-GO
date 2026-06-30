@@ -256,3 +256,27 @@ func ReviewSample(ctx context.Context, db *sql.DB, id int, userID int64, req pro
 
 	return product, err
 }
+
+func ActiveContract(ctx context.Context, db *sql.DB, id int, products products.SendActiveContract) (products.SendActiveContract, error) {
+	q := `
+	INSERT INTO active_contract
+		(supplier_id,
+		product_sample_id,
+		status,
+		created_at,
+		updated_at,
+	) VALUES
+	 (?,?,"active",NOW(),?NOW())
+	WHERE id = ?
+	`
+	_,err := db.ExecContext(
+		ctx,
+		q,
+		products.SupplierID,
+		products.ProductSampleID,
+		id,
+	)
+
+	return products, err 
+
+} 

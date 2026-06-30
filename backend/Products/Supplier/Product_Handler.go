@@ -191,6 +191,7 @@ func ReciveSampleHandler(db *sql.DB) http.HandlerFunc {
 
 func ReviewSampleHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
 		if r.Method != http.MethodPut {
 			WriteJson(w, http.StatusBadRequest, map[string]string {
 				"message" : "Gagal Update Data",
@@ -219,6 +220,13 @@ func ReviewSampleHandler(db *sql.DB) http.HandlerFunc {
 
 		var req products.ReviewSample
 		err = json.NewDecoder(r.Body).Decode(&req)
+		if req.Status != "recived" {
+			WriteJson(w, http.StatusBadRequest, map[string]string{
+			"message": "Produk harus diterima terlebih dahulu sebelum direview",
+			})
+			return
+		}
+
 		if err != nil {
 			WriteJson(w, http.StatusBadRequest, map[string]string{
 				"message": "Invalid body",

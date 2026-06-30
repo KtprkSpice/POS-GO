@@ -134,10 +134,10 @@ function DetailProductSupplier() {
 
                         <div>
                             <p className="text-gray-500 text-sm">
-                                Tanggal Review
+                                Nama Revierwer
                             </p>
-                            <p className="font-semibold">
-                                {formatDate(product.reviewed_at) ?? "-"}
+                            <p className="font-semibold capitalize">
+                                {(product.reviewer_name) ?? "-"}
                             </p>
                         </div>
 
@@ -150,9 +150,17 @@ function DetailProductSupplier() {
                             </p>
                         </div>
 
+
+                        <div>
+                            <p className="text-gray-500 text-sm">
+                                Tanggal Review
+                            </p>
+                            <p className="font-semibold">
+                                {formatDate(product.review_date) ?? "-"}
+                            </p>
+                        </div>
                     </div>
                 </div>
-
                 <div className="bg-white rounded-2xl shadow p-6 mb-6">
                     <h2 className="text-xl font-semibold mb-4">
                         Deskripsi Produk

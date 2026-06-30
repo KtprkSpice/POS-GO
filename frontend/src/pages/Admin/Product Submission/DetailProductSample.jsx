@@ -8,6 +8,7 @@ function DetailProductSample() {
     const [product, setProduct] = useState(null)
     const [reviewNote, setReviewNote] = useState("");
     const [status, setStatus] = useState("");
+    const canReview = product?.status === "recived";
 
     const formatDate = (date) => {
         if (!date) {
@@ -211,10 +212,6 @@ function DetailProductSample() {
                                 {formatDate(product.review_date) ?? "-"}
                             </p>
                         </div>
-
-
-
-
                     </div>
                 </div>
 
@@ -242,6 +239,7 @@ function DetailProductSample() {
 
                             <select
                                 value={status}
+                                disabled={!canReview}
                                 onChange={(e) => setStatus(e.target.value)}
                                 className="w-full border rounded-lg p-3"
                             >
@@ -259,6 +257,7 @@ function DetailProductSample() {
                             <textarea
                                 rows={4}
                                 value={reviewNote}
+                                disabled={!canReview}
                                 onChange={(e) => setReviewNote(e.target.value)}
                                 placeholder="Masukkan catatan review..."
                                 className="w-full border rounded-lg p-3"
@@ -267,7 +266,7 @@ function DetailProductSample() {
 
                         <button
                             onClick={handleReview}
-                            disabled={!status}
+                            disabled={!canReview || !status}
                             className="bg-amber-600 text-white px-5 py-2 rounded-lg hover:bg-amber-700 disabled:bg-gray-400"
                         >
                             Update Review

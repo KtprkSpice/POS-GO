@@ -37,3 +37,9 @@ type ReviewSample struct {
 	ReviewNote *string `json:"review_note"`
 	ReviewDate *time.Time `json:"review_date"`
 }
+
+type SendActiveContract struct {
+	SupplierID int `json:"supplier_id"`
+	ProductSampleID int `json:"product_sample_id"`
+	Status      string `json:"status"`
+}

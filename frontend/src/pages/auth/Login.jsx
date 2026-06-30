@@ -55,7 +55,7 @@ const Login = () => {
                     if (data.user?.role === "owner") {
                         navigate("/admin/suppliers");
                     } else if (data.user?.role === "supplier") {
-                        navigate("/supplier/dashboard");
+                        navigate("/vendor/dashboard");
                     } else {
                         navigate("/cashier/dashboard");
                     }
